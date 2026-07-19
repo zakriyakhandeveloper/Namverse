@@ -25,7 +25,7 @@ export const metadata = {
     siteName: 'NameVerse',
     images: [
       {
-        url: getSiteUrl() + '/logo.png',
+        url: getSiteUrl() + '/logo.svg',
         width: 1200,
         height: 630,
         alt: 'Christian Boy Names with Meanings - NameVerse',
@@ -36,7 +36,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: '100+ Christian Boy Names with Meanings | Biblical Baby Boy Names',
     description: 'Discover 100+ beautiful Christian boy names with meanings, origins & lucky numbers.',
-    images: [getSiteUrl() + '/logo.png'],
+    images: [getSiteUrl() + '/logo.svg'],
   },
   robots: { 
     index: true, 

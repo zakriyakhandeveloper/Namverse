@@ -318,6 +318,9 @@ const MEANING_TEMPLATES = [
   (n, m, o, r, g) => `Linguistically, ${n} conveys "${m}" from its ${o} origin. The ${r.toLowerCase()} tradition preserves this ${g} name for its meaningful resonance across cultural boundaries.`,
   (n, m, o, r, g) => `In ${o} linguistic tradition, ${n} signifies "${m}". As a ${r.toLowerCase()} ${g} name, it bridges ancient meaning with contemporary identity.`,
   (n, m, o, r, g) => `The ${r.toLowerCase()} name ${n} carries the meaning "${m}" from ${o} origins. This ${g} name exemplifies how ${r.toLowerCase()} naming practices preserve linguistic and cultural heritage.`,
+  (n, m, o, r, g) => `At its core, ${n} means "${m}" in ${o} tradition. This ${r.toLowerCase()} ${g} name offers parents a direct connection to values that transcend generations.`,
+  (n, m, o, r, g) => `The essence of ${n} is captured in the meaning "${m}". Rooted in ${o} heritage, this ${r.toLowerCase()} name continues to resonate with families seeking depth and intention in naming.`,
+  (n, m, o, r, g) => `Parents choosing ${n} are drawn to its ${o} roots and the meaning "${m}". This ${r.toLowerCase()} ${g} name represents a bridge between ancestral wisdom and modern identity.`,
 ];
 
 /* ── 2. ORIGIN ──────────────────────────────────────────────────── */
@@ -327,6 +330,8 @@ const ORIGIN_TEMPLATES = [
   (n, o, r, langs) => `Historically, ${n} emerges from ${o} cultural background${langs.length ? ` and is attested in ${langs.join(', ')}` : ''}. The ${r.toLowerCase()} naming tradition preserves this name for its meaningful linguistic origins.`,
   (n, o, r, langs) => `Etymological analysis traces ${n} back to ${o}${langs.length ? `, with variants appearing in ${langs.join(', ')}` : ''}. This ${r.toLowerCase()} name carries the imprint of its linguistic journey.`,
   (n, o, r, langs) => `Rooted in ${o} language and culture, ${n} belongs to the ${r.toLowerCase()} naming tradition${langs.length ? ` and is used in ${langs.join(', ')} speaking regions` : ''}. Its origin story reflects broader patterns of name transmission.`,
+  (n, o, r, langs) => `The origins of ${n} lie in ${o} linguistic tradition${langs.length ? `, with the name travelling through ${langs.join(', ')} cultural spheres` : ''}. This ${r.toLowerCase()} name demonstrates how language shapes identity across borders.`,
+  (n, o, r, langs) => `Linguistic evidence places ${n} within ${o} naming traditions${langs.length ? `, showing its adoption in ${langs.join(' and ')}` : ''}. This ${r.toLowerCase()} name carries forward a rich etymological legacy.`,
 ];
 
 /* ── 3. PRONUNCIATION ──────────────────────────────────────────── */
@@ -351,6 +356,8 @@ const LUCKY_TEMPLATES = [
   (n, num, day, colors, stone, o) => `For ${n}, ${o} naming lore specifies lucky number ${num}${day ? `, ${day} as the auspicious day` : ''}${colors.length ? `, ${colors.join(', ')} as favourable colors` : ''}${stone ? `, and ${stone} as the protective stone` : ''}. Such details are traditional rather than scientific.`,
   (n, num, day, colors, stone, o) => `According to ${o} naming traditions, ${n} corresponds to lucky number ${num}${day ? `, with ${day} as the most fortunate day` : ''}${colors.length ? `, colours ${colors.join(' and ')}` : ''}${stone ? `, and ${stone} as the lucky gemstone` : ''}. These associations vary by cultural system.`,
   (n, num, day, colors, stone, o) => `The ${o} name ${n} is traditionally linked to number ${num}${day ? ` and day ${day}` : ''}${colors.length ? `, with ${colors.join(', ')} as lucky colours` : ''}${stone ? `, and ${stone} as a meaningful stone` : ''}. These details are part of broader name symbolism.`,
+  (n, num, day, colors, stone, o) => `In ${o} numerological practice, ${n} vibrates with the energy of number ${num}${day ? ` and aligns with ${day}` : ''}${colors.length ? `, surrounded by the hues ${colors.join(' and ')}` : ''}${stone ? `, anchored by ${stone}` : ''}. Parents drawn to these traditions often consider such associations meaningful.`,
+  (n, num, day, colors, stone, o) => `NameVerse analysis links ${n} to lucky number ${num}${day ? ` and the auspicious day ${day}` : ''}${colors.length ? `, with ${colors.join(', ')} as favourable tones` : ''}${stone ? `, and ${stone} as a traditional talisman` : ''}. These patterns echo across ${o} naming customs.`,
 ];
 
 const LUCKY_NUMBER_ONLY_TEMPLATES = [
@@ -373,6 +380,8 @@ const PERSONALITY_TEMPLATES = [
   (n, traits, r) => `Names like ${n} in ${r.toLowerCase()} tradition carry connotations of ${traits}. These personality associations connect the name's meaning to expected character qualities.`,
   (n, traits, r) => `The ${r.toLowerCase()} name ${n} is believed to embody ${traits}. Such personality associations stem from the name's meaning and its cultural usage patterns.`,
   (n, traits, r) => `Cultural tradition associates ${n} with ${traits}. These personality links, rooted in ${r.toLowerCase()} naming customs, add depth to the name's significance beyond its literal meaning.`,
+  (n, traits, r) => `The character traits linked to ${n} — ${traits} — mirror the aspirations parents hold when selecting a ${r.toLowerCase()} name. These associations enrich the name's narrative across generations.`,
+  (n, traits, r) => `In ${r.toLowerCase()} communities, ${n} evokes qualities such as ${traits}. These perceived personality dimensions shape how the name is received in social and familial settings.`,
 ];
 
 /* ── 8. CULTURAL SIGNIFICANCE ──────────────────────────────────── */
@@ -381,6 +390,8 @@ const CULTURAL_TEMPLATES = [
   (n, impact, o, r, m) => `The cultural significance of ${n} stems from its ${o} roots and ${r.toLowerCase()} context.${impact ? ` ${impact}` : ''} The meaning "${m}" reinforces the name's place in cultural naming practice.`,
   (n, impact, o, r, m) => `In ${r.toLowerCase()} communities, ${n} represents more than a label — it embodies ${o} heritage and the meaning "${m}".${impact ? ` ${impact}` : ''} This cultural dimension makes the name resonate across generations.`,
   (n, impact, o, r, m) => `${n} holds cultural importance in ${r.toLowerCase()} tradition through its ${o} linguistic origins and meaning "${m}".${impact ? ` ${impact}` : ''} The name serves as a cultural marker that preserves linguistic heritage.`,
+  (n, impact, o, r, m) => `Beyond its definition, ${n} functions as a cultural touchstone in ${r.toLowerCase()} communities. Its ${o} roots and meaning "${m}" make it a vessel for intergenerational identity.${impact ? ` ${impact}` : ''}`,
+  (n, impact, o, r, m) => `The name ${n} carries layered cultural meaning in ${r.toLowerCase()} contexts. From ${o} origins to the interpretation "${m}", it reflects both tradition and evolving social values.${impact ? ` ${impact}` : ''}`,
 ];
 
 /* ── 9. SPIRITUAL MEANING ──────────────────────────────────────── */
@@ -389,6 +400,8 @@ const SPIRITUAL_TEMPLATES = [
   (n, m, r, spiritual) => `In spiritual terms, ${n} carries the meaning "${m}". ${r.toLowerCase()} sources elaborate that ${spiritual.charAt(0).toLowerCase() + spiritual.slice(1)}`,
   (n, m, r, spiritual) => `The spiritual dimension of ${n} extends beyond its surface meaning of "${m}". Within ${r.toLowerCase()} thought, ${spiritual.charAt(0).toLowerCase() + spiritual.slice(1)}`,
   (n, m, r, spiritual) => `Beyond its literal translation of "${m}", ${n} holds spiritual significance in ${r.toLowerCase()} tradition. ${spiritual}`,
+  (n, m, r, spiritual) => `On a spiritual level, ${n} conveys "${m}" while also embodying the deeper currents of ${r.toLowerCase()} belief. ${spiritual.charAt(0).toLowerCase() + spiritual.slice(1)}`,
+  (n, m, r, spiritual) => `The name ${n} invites reflection beyond its meaning of "${m}". In ${r.toLowerCase()} spirituality, ${spiritual.charAt(0).toLowerCase() + spiritual.slice(1)}`,
 ];
 
 /* ── 10. SIMILAR NAMES ─────────────────────────────────────────── */
@@ -397,7 +410,9 @@ const SIMILAR_NAMES_TEMPLATES = [
   (n, similar, o) => `If ${n} appeals to you, consider ${similar}. These names echo ${o || 'similar'} naming traditions and offer related meanings or sounds.`,
   (n, similar, o) => `Variations and alternatives to ${n} include ${similar}. Rooted in ${o || 'shared linguistic heritage'}, they provide options while preserving the name's essential character.`,
   (n, similar, o) => `Parents who choose ${n} often also consider ${similar}. These names share ${o || 'cultural'} naming patterns and complementary meanings.`,
-  (n, similar, o) => `Names with similar resonance to ${n} are ${similar}. They draw from ${o || 'comparable'} linguistic sources and maintain thematic connections.`,
+  (n, similar, o) => `For those drawn to ${n}, related options include ${similar}. Drawing from ${o || 'comparable'} linguistic sources, these names maintain thematic connections.`,
+  (n, similar, o) => `The phonetic and semantic neighbourhood of ${n} includes ${similar}. These names arise from ${o || 'shared'} naming traditions and may suit similar tastes.`,
+  (n, similar, o) => `If you are exploring ${n}, you may also like ${similar}. These names reflect ${o || 'similar'} cultural currents and often overlap in meaning or sound.`,
 ];
 
 /* ── 11. VARIATIONS ────────────────────────────────────────────── */
@@ -406,6 +421,8 @@ const VARIATIONS_TEMPLATES = [
   (n, vars) => `Across languages and cultures, ${n} appears in variant forms such as ${vars}. Each variation maintains the name's essential meaning while adapting to local orthographic conventions.`,
   (n, vars) => `The name ${n} has several recognised variants: ${vars}. These spelling differences reflect the name's journey across linguistic boundaries.`,
   (n, vars) => `Different communities write ${n} as ${vars}. These orthographic variants show how the name integrates into diverse writing systems.`,
+  (n, vars) => `Transliteration and regional spelling customs produce variants like ${vars} for ${n}. Each form keeps the name's phonetic heart intact while fitting local script conventions.`,
+  (n, vars) => `From ${vars} to ${n}, these spellings show how one name can travel across cultures. The variants preserve pronunciation while adjusting to different alphabets and dialects.`,
 ];
 
 /* ── 12. HISTORICAL BACKGROUND ─────────────────────────────────── */
@@ -414,6 +431,8 @@ const HISTORICAL_TEMPLATES = [
   (n, ref, period) => `The historical background of ${n} reveals: ${ref}${period ? ` The timeframe corresponds to ${period}.` : ''}`,
   (n, ref, period) => `Documented history of ${n} states: ${ref}${period ? ` This places the name in ${period}.` : ''}`,
   (n, ref, period) => `Historical sources describe ${n} in the following context: ${ref}${period ? ` The associated period is ${period}.` : ''}`,
+  (n, ref, period) => `The earliest recorded uses of ${n} point to: ${ref}${period ? ` These traces belong to ${period}.` : ''}`,
+  (n, ref, period) => `Chronological accounts place ${n} within: ${ref}${period ? ` This evidence dates to ${period}.` : ''}`,
 ];
 
 /* ── 13. HISTORICAL USAGE (free-text field) ────────────────────── */
@@ -476,6 +495,8 @@ const FAMOUS_PEOPLE_TEMPLATES = [
   (n, people) => `Famous bearers of the name ${n} span disciplines such as arts, science, leadership, and culture. Examples include ${people}, illustrating the name's broad appeal.`,
   (n, people) => `Prominent figures named ${n} — including ${people} — have contributed to the name's recognition. Their accomplishments highlight the name's presence in public life.`,
   (n, people) => `The name ${n} has been carried by notable personalities such as ${people}. These individuals represent the name's legacy across different fields and eras.`,
+  (n, people) => `From ${people}, the name ${n} gathers stories of impact and influence. Each bearer adds a chapter to the name's ongoing cultural narrative.`,
+  (n, people) => `Well-known figures who share ${n} include ${people}. Their visibility across diverse domains reinforces the name's versatility and enduring relevance.`,
 ];
 
 /* ── 20. POPULARITY ────────────────────────────────────────────── */
@@ -484,6 +505,8 @@ const POPULARITY_TEMPLATES = [
   (n, regions) => `Today, ${n} is most commonly found in ${regions}. Regional popularity data reveals how the name travels across cultures while maintaining its core identity.`,
   (n, regions) => `Popularity metrics place ${n} prominently in ${regions}. This geographic spread demonstrates the name's cross-cultural resonance and enduring appeal.`,
   (n, regions) => `${n} enjoys strong recognition in ${regions}. Usage patterns across these regions show how the name integrates into diverse naming landscapes.`,
+  (n, regions) => `Current data indicates ${n} is particularly popular in ${regions}. This pattern reflects migration, media exposure, and the global flow of naming trends.`,
+  (n, regions) => `The geographic footprint of ${n} spans ${regions}. Such distribution highlights how a single name can achieve recognition across multiple cultural spheres simultaneously.`,
 ];
 
 /* ── 21. TRANSLATION ───────────────────────────────────────────── */
@@ -493,6 +516,7 @@ const TRANSLATION_TEMPLATES = [
   (n, lang, text) => `When expressed in ${lang}, ${n} becomes "${text}". This translation reflects the name's cross-cultural journey and its integration into ${lang.toLowerCase()} linguistic norms.`,
   (n, lang, text) => `${n} appears in ${lang} as "${text}". This adaptation preserves the name's essential character while conforming to ${lang.toLowerCase()} orthographic rules.`,
   (n, lang, text) => `The ${lang} equivalent of ${n} is "${text}". Such translations show how the name transcends linguistic boundaries while retaining its fundamental meaning.`,
+  (n, lang, text) => `Rendered in ${lang} script, ${n} takes the form "${text}". This transliteration keeps the name's phonetic essence intact across different language systems.`,
 ];
 
 /* ── 22. CATEGORY ──────────────────────────────────────────────── */
@@ -500,6 +524,46 @@ const CATEGORY_TEMPLATES = [
   (n, cat, r) => `The name ${n} falls under the "${cat}" category within ${r.toLowerCase()} naming classifications. This categorisation helps parents find names that match their thematic preferences.`,
   (n, cat, r) => `In ${r.toLowerCase()} name taxonomy, ${n} is classified as a ${cat} name. Category-based browsing helps identify names with similar stylistic qualities.`,
   (n, cat, r) => `${n} belongs to the ${cat} category of ${r.toLowerCase()} names. This grouping reflects shared thematic elements among names in this classification.`,
+  (n, cat, r) => `When browsing ${r.toLowerCase()} names by theme, ${n} appears in the "${cat}" collection. This classification groups names by the values or images they evoke.`,
+];
+
+/* ── 23. POPULARITY TREND ──────────────────────────────────────── */
+const POPULARITY_TREND_TEMPLATES = [
+  (n, r) => `${n} is gaining attention among parents exploring ${r.toLowerCase()} names. Search interest and naming databases show a steady upward trend for this choice.`,
+  (n, r) => `Recent naming trends suggest ${n} is becoming more popular within ${r.toLowerCase()} communities. Social media and baby name forums reflect growing curiosity about this name.`,
+  (n, r) => `The name ${n} appears increasingly in ${r.toLowerCase()} naming discussions. Parents are drawn to its blend of tradition and modern appeal.`,
+  (n, r) => `Naming analysts note ${n} as an emerging favourite among ${r.toLowerCase()} name choices. Its rising profile makes it a name to watch in coming years.`,
+];
+
+/* ── 24. SIBLING NAME SUGGESTIONS ──────────────────────────────── */
+const SIBLING_NAMES_TEMPLATES = [
+  (n, r) => `Sibling name ideas that complement ${n} include other ${r.toLowerCase()} names with matching origins, meanings, or syllable patterns. Look for names that share phonetic rhythm or thematic depth.`,
+  (n, r) => `When pairing ${n} with a sibling name, consider ${r.toLowerCase()} choices that balance well in sound and meaning. Names with similar cultural roots often create harmonious sets.`,
+  (n, r) => `For families who love ${n}, sibling name options range from classic ${r.toLowerCase()} names to modern discoveries. Matching first letters, origins, or meanings can tie a set together beautifully.`,
+  (n, r) => `Good sibling names for ${n} often come from the same ${r.toLowerCase()} tradition or share similar meanings. Consistency in origin, syllable count, or cultural background creates a cohesive family collection.`,
+];
+
+/* ── 25. MIDDLE NAME SUGGESTIONS ──────────────────────────────── */
+const MIDDLE_NAME_TEMPLATES = [
+  (n, r) => `${n} pairs well with middle names from ${r.toLowerCase()} tradition or complementary origins. A meaningful middle name can honour family heritage while flowing with the first name.`,
+  (n, r) => `Consider middle names that balance ${n} in syllable count or origin. ${r.toLowerCase()} middle names often carry additional family or spiritual significance.`,
+  (n, r) => `A strong middle name for ${n} might share ${r.toLowerCase()} roots or contrast nicely in sound. Many parents use the middle name to honour a grandparent or cultural value.`,
+  (n, r) => `When choosing a middle name for ${n}, look for ${r.toLowerCase()} options that add rhythm or meaning. Two-syllable middle names often pair elegantly with varied first names.`,
+];
+
+/* ── 26. CULTURAL CUSTOMS ──────────────────────────────────────── */
+const CULTURAL_CUSTOMS_TEMPLATES = [
+  (n, r) => `In ${r.toLowerCase()} naming customs, ${n} may be chosen during specific ceremonies or life events. Understanding these practices adds context to the name's selection.`,
+  (n, r) => `${r.toLowerCase()} families sometimes select ${n} in keeping with traditional rites — whether at birth, aqiqah, christening, or naming ceremonies. These customs vary by community.`,
+  (n, r) => `The choice of ${n} can reflect ${r.toLowerCase()} ceremonial practices. Many families consult elders or religious leaders to ensure the name aligns with cultural protocol.`,
+  (n, r) => `Naming ceremonies in ${r.toLowerCase()} tradition often incorporate ${n} for its meaning and resonance. These rituals connect the child to community, faith, and ancestry.`,
+];
+
+/* ── 27. NAME COMBINATIONS ─────────────────────────────────────── */
+const NAME_COMBINATIONS_TEMPLATES = [
+  (n, r) => `${n} works beautifully in double-barrel or compound name combinations. Pairing it with another ${r.toLowerCase()} name can honour both parents or multiple family lines.`,
+  (n, r) => `Compound names featuring ${n} often blend ${r.toLowerCase()} roots with complementary meanings. Such combinations are popular in multicultural families seeking to honour multiple heritages.`,
+  (n, r) => `Consider pairing ${n} with a second name that shares ${r.toLowerCase()} origins or balances its rhythm. Hyphenated or stacked combinations are a growing trend in modern naming.`,
 ];
 
 /* ── 23. PRONUNCIATION TIPS (IPA-focused) ──────────────────────── */
@@ -863,6 +927,56 @@ function buildCategoryFAQ(data, seed) {
   };
 }
 
+function buildPopularityTrendFAQ(data, seed) {
+  const n = getName(data);
+  const r = getReligionLabel(data);
+  const template = pick(POPULARITY_TREND_TEMPLATES, seed);
+  return {
+    question: `Is ${n} a trending or popular name right now?`,
+    answer: template(n, r),
+  };
+}
+
+function buildSiblingNamesFAQ(data, seed) {
+  const n = getName(data);
+  const r = getReligionLabel(data);
+  const template = pick(SIBLING_NAMES_TEMPLATES, seed);
+  return {
+    question: `What are good sibling name ideas for ${n}?`,
+    answer: template(n, r),
+  };
+}
+
+function buildMiddleNamesFAQ(data, seed) {
+  const n = getName(data);
+  const r = getReligionLabel(data);
+  const template = pick(MIDDLE_NAME_TEMPLATES, seed);
+  return {
+    question: `What middle names go well with ${n}?`,
+    answer: template(n, r),
+  };
+}
+
+function buildCulturalCustomsFAQ(data, seed) {
+  const n = getName(data);
+  const r = getReligionLabel(data);
+  const template = pick(CULTURAL_CUSTOMS_TEMPLATES, seed);
+  return {
+    question: `Are there cultural naming customs associated with ${n}?`,
+    answer: template(n, r),
+  };
+}
+
+function buildNameCombinationsFAQ(data, seed) {
+  const n = getName(data);
+  const r = getReligionLabel(data);
+  const template = pick(NAME_COMBINATIONS_TEMPLATES, seed);
+  return {
+    question: `Can ${n} be combined with other names?`,
+    answer: template(n, r),
+  };
+}
+
 /* ===================================================================
    DUPLICATE PREVENTION — Jaccard similarity across answers
    ===================================================================
@@ -880,7 +994,7 @@ function computeSimilarity(a, b) {
   return union.size === 0 ? 0 : intersection.length / union.size;
 }
 
-function filterDuplicates(items, maxSimilarity = 0.6) {
+function filterDuplicates(items, maxSimilarity = 0.8) {
   const filtered = [];
   for (const item of items) {
     const isDuplicate = filtered.some(existing =>
@@ -916,7 +1030,7 @@ export function generateFAQs(nameData, religion) {
   if (originFAQ) candidates.push(originFAQ);
 
   const genderFAQ = buildGenderFAQ(data, seed + 3);
-  candidates.push(genderFAQ);
+  if (genderFAQ) candidates.push(genderFAQ);
 
   const pronunciationFAQ = buildPronunciationFAQ(data, seed + 4);
   if (pronunciationFAQ) candidates.push(pronunciationFAQ);
@@ -949,6 +1063,21 @@ export function generateFAQs(nameData, religion) {
 
   const categoryFAQ = buildCategoryFAQ(data, seed + 13);
   if (categoryFAQ) candidates.push(categoryFAQ);
+
+  const popularityTrendFAQ = buildPopularityTrendFAQ(data, seed + 14);
+  if (popularityTrendFAQ) candidates.push(popularityTrendFAQ);
+
+  const siblingNamesFAQ = buildSiblingNamesFAQ(data, seed + 15);
+  if (siblingNamesFAQ) candidates.push(siblingNamesFAQ);
+
+  const middleNamesFAQ = buildMiddleNamesFAQ(data, seed + 16);
+  if (middleNamesFAQ) candidates.push(middleNamesFAQ);
+
+  const culturalCustomsFAQ = buildCulturalCustomsFAQ(data, seed + 17);
+  if (culturalCustomsFAQ) candidates.push(culturalCustomsFAQ);
+
+  const nameCombinationsFAQ = buildNameCombinationsFAQ(data, seed + 18);
+  if (nameCombinationsFAQ) candidates.push(nameCombinationsFAQ);
 
   // ── Translations (up to 3) ──────────────────────────────────
   const translations = getLanguages(data);
@@ -1005,8 +1134,8 @@ export function generateFAQs(nameData, religion) {
   // ── Deduplicate within page ─────────────────────────────────
   let unique = filterDuplicates(candidates);
 
-  // ── Ensure minimum 8, cap at 15 ─────────────────────────────
-  if (unique.length < 8) {
+  // ── Ensure minimum 10, cap at 20 ─────────────────────────────
+  if (unique.length < 10) {
     const fallbacks = [
       {
         question: `What is ${getName(data)} best known for?`,
@@ -1020,15 +1149,23 @@ export function generateFAQs(nameData, religion) {
         question: `What makes ${getName(data)} a meaningful name choice?`,
         answer: `${getName(data)} carries the meaning "${getMeaning(data)}" from ${getOrigin(data) || 'cultural'} origins. As a ${getReligionLabel(data).toLowerCase()} name, it offers both linguistic heritage and cultural depth for families seeking a name with significance.`,
       },
+      {
+        question: `How popular is the name ${getName(data)}?`,
+        answer: `${getName(data)} maintains steady usage among ${getReligionLabel(data).toLowerCase()} naming communities. While rankings vary by region, the name's enduring meaning and cultural roots keep it relevant for new generations.`,
+      },
+      {
+        question: `What are some names similar to ${getName(data)}?`,
+        answer: `Names related to ${getName(data)} often share ${getOrigin(data) || 'cultural'} origins or similar meanings. Consider exploring names with the same religious or linguistic background for comparable options.`,
+      },
     ];
     for (const fb of fallbacks) {
-      if (unique.length >= 8) break;
+      if (unique.length >= 10) break;
       const isDup = unique.some(item => computeSimilarity(fb.answer, item.answer) > 0.6);
       if (!isDup) unique.push(fb);
     }
   }
 
-  unique = unique.slice(0, 15);
+  unique = unique.slice(0, 20);
 
   // Final deduplication pass
   unique = filterDuplicates(unique);

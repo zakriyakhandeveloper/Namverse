@@ -103,7 +103,7 @@ export function generateCanonicalUrl(path, baseUrl) {
 /* -----------------------------------
    OG URL (SAFE)
 ----------------------------------- */
-export function generateOgUrl(path = '/logo.png') {
+export function generateOgUrl(path = '/logo.svg') {
   return generateCanonicalUrl(path);
 }
 

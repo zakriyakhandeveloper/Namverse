@@ -1,3 +1,5 @@
+export const revalidate = 31536000; // 365 days
+
 import Link from 'next/link';
 import { validateMetaTitle, validateMetaDescription } from '@/lib/seo/meta-helpers';
 import { getSiteUrl } from '@/lib/seo/site';

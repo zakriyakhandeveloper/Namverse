@@ -233,7 +233,7 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /_next/
-Sitemap: https://nameverse.vercel.app/sitemap.xml
+Sitemap: https://nameverse.site/sitemap.xml
 ```
 
 **Status:**

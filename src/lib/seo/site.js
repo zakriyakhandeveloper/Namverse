@@ -4,7 +4,7 @@
  */
 
 const rawSiteUrl = (
-  process.env.NEXT_PUBLIC_SITE_URL || "https://nameverse.vercel.app"
+  process.env.NEXT_PUBLIC_SITE_URL || "https://nameverse.site"
 ).trim();
 
 // Guarantee a protocol so consumers using `new URL(SITE_URL)` never throw
@@ -70,8 +70,8 @@ export function canonicalUrl(path) {
 /**
  * Safe OG image generator
  */
-export function ogImageUrl(path = "/logo.png") {
-  return absoluteUrl(path || "/logo.png");
+export function ogImageUrl(path = "/logo.svg") {
+  return absoluteUrl(path || "/logo.svg");
 }
 
-export const DEFAULT_OG_PATH = "/logo.png";
+export const DEFAULT_OG_PATH = "/logo.svg";

@@ -418,14 +418,14 @@ export default function HomePageClient({ latestArticles = [] }) {
 
       <section aria-labelledby="meaning-title" className="nv-section">
         <div className="nv-container">
-          <div className="rounded-[2.5rem] border border-[color:var(--nv-border)] bg-[color:var(--nv-ink)] p-6 text-white sm:p-8 lg:p-10">
+          <div className="rounded-[2.5rem] border border-slate-800 bg-slate-900 p-6 text-white sm:p-8 lg:p-10">
             <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center">
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/80">
                   <Heart className="h-3.5 w-3.5" />
                   Meaning-led discovery
                 </div>
-                <h2 id="meaning-title" className="nv-display mt-5 text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl">
+                <h2 id="meaning-title" className="nv-display mt-5 text-3xl font-semibold leading-tight text-white sm:text-4xl md:text-5xl">
                   Baby names with meanings that feel personal.
                 </h2>
                 <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/72 sm:text-base">
@@ -436,7 +436,7 @@ export default function HomePageClient({ latestArticles = [] }) {
                     <Link
                       key={meaning}
                       href={`/search?q=${encodeURIComponent(`names that mean ${meaning}`)}`}
-                      className="rounded-full bg-white px-4 py-2 text-sm font-bold text-[color:var(--nv-ink)] transition hover:bg-white/80"
+                      className="rounded-full bg-white px-4 py-2 text-sm font-bold text-slate-900 transition hover:bg-white/80"
                     >
                       Names that mean {meaning}
                     </Link>
@@ -447,22 +447,22 @@ export default function HomePageClient({ latestArticles = [] }) {
               <div className="grid gap-3 sm:grid-cols-2">
                 <Link href="/names-by-meaning" className="rounded-[1.75rem] bg-white/10 p-5 transition hover:bg-white/16">
                   <Library className="h-6 w-6 text-white/90" />
-                  <h3 className="mt-4 text-base font-bold">Meaning index</h3>
+                  <h3 className="mt-4 text-base font-bold text-white">Meaning index</h3>
                   <p className="mt-2 text-sm leading-relaxed text-white/68">Find names by semantic theme and cultural interpretation.</p>
                 </Link>
                 <Link href="/name-meanings" className="rounded-[1.75rem] bg-white/10 p-5 transition hover:bg-white/16">
                   <Globe className="h-6 w-6 text-white/90" />
-                  <h3 className="mt-4 text-base font-bold">Origin explorer</h3>
+                  <h3 className="mt-4 text-base font-bold text-white">Origin explorer</h3>
                   <p className="mt-2 text-sm leading-relaxed text-white/68">Browse Arabic, Urdu, Persian, Sanskrit, Hebrew and Greek roots.</p>
                 </Link>
                 <Link href="/trending-names" className="rounded-[1.75rem] bg-white/10 p-5 transition hover:bg-white/16">
                   <Flame className="h-6 w-6 text-white/90" />
-                  <h3 className="mt-4 text-base font-bold">Trending names</h3>
+                  <h3 className="mt-4 text-base font-bold text-white">Trending names</h3>
                   <p className="mt-2 text-sm leading-relaxed text-white/68">Discover names gaining search interest across traditions.</p>
                 </Link>
                 <Link href="/search" className="rounded-[1.75rem] bg-white/10 p-5 transition hover:bg-white/16">
                   <Search className="h-6 w-6 text-white/90" />
-                  <h3 className="mt-4 text-base font-bold">Advanced search</h3>
+                  <h3 className="mt-4 text-base font-bold text-white">Advanced search</h3>
                   <p className="mt-2 text-sm leading-relaxed text-white/68">Search names, meanings, origins, religions and gender.</p>
                 </Link>
               </div>

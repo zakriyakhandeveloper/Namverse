@@ -48,32 +48,32 @@ export default function ShareButtons({ name, pageUrl, description }) {
 
   return (
     <div className="space-y-3">
-      <div className="mb-2 text-sm font-semibold text-slate-900">Share this page</div>
+      <div className="mb-2 text-sm font-bold uppercase tracking-[0.16em] text-[color:var(--nv-muted)]">Share this name</div>
       <div className="grid grid-cols-2 gap-2">
         <button
           onClick={() => handleShare('facebook')}
-          className="flex items-center justify-center gap-2 rounded-2xl bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
+          className="flex items-center justify-center gap-2 rounded-2xl bg-[color:var(--nv-ink)] px-3 py-2.5 text-sm font-bold text-white transition hover:bg-slate-800"
           aria-label="Share on Facebook"
         >
           <FacebookIcon className="h-4 w-4" /> Facebook
         </button>
         <button
           onClick={() => handleShare('twitter')}
-          className="flex items-center justify-center gap-2 rounded-2xl bg-sky-50 px-3 py-2 text-sm font-medium text-sky-700 transition hover:bg-sky-100"
+          className="flex items-center justify-center gap-2 rounded-2xl bg-[color:var(--nv-ink)] px-3 py-2.5 text-sm font-bold text-white transition hover:bg-slate-800"
           aria-label="Share on Twitter"
         >
           <TwitterIcon className="h-4 w-4" /> Twitter
         </button>
         <button
           onClick={() => handleShare('whatsapp')}
-          className="flex items-center justify-center gap-2 rounded-2xl bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 transition hover:bg-emerald-100"
+          className="flex items-center justify-center gap-2 rounded-2xl bg-[color:var(--nv-ink)] px-3 py-2.5 text-sm font-bold text-white transition hover:bg-slate-800"
           aria-label="Share on WhatsApp"
         >
           <MessageCircle className="h-4 w-4" /> WhatsApp
         </button>
         <button
           onClick={() => handleShare('copy')}
-          className="flex items-center justify-center gap-2 rounded-2xl bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+          className="flex items-center justify-center gap-2 rounded-2xl border border-[color:var(--nv-border)] bg-white/60 px-3 py-2.5 text-sm font-bold text-[color:var(--nv-ink)] transition hover:border-[color:var(--nv-accent-2)] hover:text-[color:var(--nv-accent-2)]"
           aria-label="Copy page link"
         >
           <Copy className="h-4 w-4" /> {copied ? 'Copied!' : 'Copy'}

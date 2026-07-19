@@ -119,7 +119,7 @@
 
 ## 9. Canonical URL ✅ GOOD
 
-`https://nameverse.vercel.app/names` — correct, self-referencing.
+`https://nameverse.site/names` — correct, self-referencing.
 
 ---
 

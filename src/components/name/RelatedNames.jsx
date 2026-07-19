@@ -32,31 +32,30 @@ export default function RelatedNames({ data }) {
   }
 
   return (
-    <section className="nv-card-solid" aria-labelledby="similar-names-heading">
-      <div className="mb-5 flex items-center gap-3 text-slate-900">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
+    <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]" aria-labelledby="similar-names-heading">
+      <div className="mb-5 flex items-start gap-3">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 shadow-sm">
           <LinkIcon className="h-5 w-5" />
         </div>
         <div>
-          <h2 id="similar-names-heading" className="text-xl font-semibold">Similar Names</h2>
-          <p className="text-sm text-slate-500">Explore names with the same sound, spelling, or origin.</p>
+          <h2 id="similar-names-heading" className="nv-display text-xl font-semibold text-[color:var(--nv-ink)]">Similar Names</h2>
+          <p className="mt-1 text-sm text-[color:var(--nv-muted)]">Explore names with the same sound, spelling, or origin.</p>
         </div>
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         {hasSimilar && (
           <div>
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Similar sounding names</h3>
-            <div className="flex flex-wrap gap-2">
+            <h3 className="mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">Similar sounding names</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
               {similarNames.slice(0, 12).map((name) => {
                 const link = normalizeLink(name, religionKey);
-                // Only render link if slug is valid (prevents broken internal links)
                 if (!link) return null;
                 return (
                   <Link
                     key={name}
                     href={link}
-                    className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm font-medium text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700"
+                    className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-3 text-sm font-medium text-[color:var(--nv-ink)] transition hover:-translate-y-0.5 hover:border-[color:var(--nv-accent-2)] hover:text-[color:var(--nv-accent-2)] hover:shadow-md"
                   >
                     {name}
                   </Link>
@@ -68,8 +67,8 @@ export default function RelatedNames({ data }) {
 
         {hasRelated && (
           <div>
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Related names</h3>
-            <div className="flex flex-wrap gap-2">
+            <h3 className="mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">Related names</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
               {relatedNames.slice(0, 12).map((name) => {
                 const link = normalizeLink(name, religionKey);
                 if (!link) return null;
@@ -77,7 +76,7 @@ export default function RelatedNames({ data }) {
                   <Link
                     key={name}
                     href={link}
-                    className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm font-medium text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700"
+                    className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-3 text-sm font-medium text-[color:var(--nv-ink)] transition hover:-translate-y-0.5 hover:border-[color:var(--nv-accent-2)] hover:text-[color:var(--nv-accent-2)] hover:shadow-md"
                   >
                     {name}
                   </Link>
@@ -89,18 +88,18 @@ export default function RelatedNames({ data }) {
 
         {hasVariations && (
           <div>
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Spelling variations</h3>
-            <div className="flex flex-wrap gap-2">
+            <h3 className="mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">Spelling variations</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
               {variations.slice(0, 12).map((value) => {
                 const link = normalizeLink(cleanName(value), religionKey);
                 if (!link) {
-                  return <span key={value} className="rounded-full bg-amber-50 px-3 py-1 text-sm text-amber-700">{cleanName(value)}</span>;
+                  return <span key={value} className="rounded-2xl border border-amber-200 bg-amber-50/60 px-3 py-2 text-sm text-amber-800">{cleanName(value)}</span>;
                 }
                 return (
                   <Link
                     key={value}
                     href={link}
-                    className="rounded-full bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700 transition hover:bg-amber-100"
+                    className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-3 text-sm font-medium text-[color:var(--nv-ink)] transition hover:-translate-y-0.5 hover:border-[color:var(--nv-accent-2)] hover:text-[color:var(--nv-accent-2)] hover:shadow-md"
                   >
                     {cleanName(value)}
                   </Link>

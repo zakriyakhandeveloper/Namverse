@@ -26,8 +26,10 @@ export async function generateStaticParams() {
   const params = [];
 
   for (const religion of religions) {
-    // Pre-generate first 5 pages for each religion
-    for (let page = 1; page <= 5; page++) {
+    // Pre-generate the first 2 pages of each religion at build time; deeper
+    // pages generate on-demand via ISR. Keeps the build fast while hot pages
+    // stay static (prebuilding 20 pages/religion triggered slow backend fetches).
+    for (let page = 1; page <= 2; page++) {
       params.push({
         religion,
         page: String(page),

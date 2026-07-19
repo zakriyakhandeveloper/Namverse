@@ -4,6 +4,7 @@ import { Globe, Sparkles, Star, BookOpen, ChevronRight, Moon, Quote } from 'luci
 import { validateMetaTitle, validateMetaDescription } from '@/lib/seo/meta-helpers';
 import { getSiteUrl } from '@/lib/seo/site';
 import SitePage from '@/components/Layout/SitePage';
+import { gradientFor } from '@/lib/ui/colorGradient';
 
 // ISR: 30-day cache — static content
 export const revalidate = 31536000; // 365 days
@@ -182,7 +183,7 @@ export default async function LanguagesPage() {
                 const Icon = lang.icon;
                 return (
                   <div key={index} className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <div className={`bg-gradient-to-r from-${lang.color}-500 to-${lang.color}-600 p-6 text-white`}>
+                    <div className={`bg-gradient-to-r ${gradientFor(lang.color)} p-6 text-white`}>
                       <div className="flex items-center justify-between mb-4">
                         <Icon className="w-8 h-8" />
                         <span className="text-sm font-medium bg-white/20 px-3 py-1 rounded-full">

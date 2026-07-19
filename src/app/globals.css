@@ -1,41 +1,143 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-:root {
-  --nv-canvas: #F8FAFC;
-  --nv-canvas-2: #EFF6FF;
-  --nv-ink: #0F172A;
-  --nv-muted: #64748B;
-  --nv-card: rgba(255, 255, 255, 0.86);
-  --nv-card-strong: rgba(255, 255, 255, 0.96);
-  --nv-border: #E2E8F0;
-  --nv-shadow: rgba(15, 23, 42, 0.12);
-  --nv-accent: #0EA5E9;
-  --nv-accent-2: #2563EB;
-  --nv-accent-3: #3B82F6;
-  --nv-success: #10B981;
-  --nv-warning: #F59E0B;
-  --nv-error: #EF4444;
+/* Scope Tailwind v4 content scanning to the app source only. Without this,
+   Tailwind auto-detects the whole project (incl. node_modules / public data),
+   emitting the full ~160KB utility set instead of only used classes.
+   Paths are relative to this file (src/app/), so ../ covers src/ and project root. */
+@source "../**/*.{js,jsx,ts,tsx,mdx}";
+@source "../../public/data/**/*.json";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   NAMEVERSE DESIGN TOKENS — v2.0 (2026)
+   Single source of truth for all colors, spacing, radius, and shadows.
+   Every component MUST reference these tokens — no hardcoded hex/px values.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ── Color Palette ── */
+  --color-nv-base: #FAFBFC;
+  --color-nv-surface: #FFFFFF;
+  --color-nv-surface-subtle: #F1F5F9;
+  --color-nv-border: #E2E8F0;
+  --color-nv-border-strong: #CBD5E1;
+  --color-nv-text: #0B1420;
+  --color-nv-text-secondary: #475569;
+  --color-nv-text-muted: #94A3B8;
+  --color-nv-primary: #1E3A5F;
+  --color-nv-primary-hover: #162D4A;
+  --color-nv-accent: #2563EB;
+  --color-nv-accent-hover: #1D4ED8;
+  --color-nv-accent-subtle: #EFF6FF;
+  --color-nv-success: #059669;
+  --color-nv-warning: #D97706;
+  --color-nv-error: #DC2626;
+
+  /* ── Dark Mode Colors (applied via .dark class) ── */
+  --color-nv-base-dark: #0B1120;
+  --color-nv-surface-dark: #131C2E;
+  --color-nv-surface-subtle-dark: #1A2744;
+  --color-nv-border-dark: #1E2A45;
+  --color-nv-border-strong-dark: #2D3A5E;
+  --color-nv-text-dark: #F1F5F9;
+  --color-nv-text-secondary-dark: #94A3B8;
+  --color-nv-text-muted-dark: #64748B;
+  --color-nv-primary-dark: #3B82F6;
+  --color-nv-primary-hover-dark: #60A5FA;
+  --color-nv-accent-dark: #60A5FA;
+  --color-nv-accent-hover-dark: #93C5FD;
+  --color-nv-accent-subtle-dark: #1E3A5F;
+  --color-nv-success-dark: #34D399;
+  --color-nv-warning-dark: #FBBF24;
+  --color-nv-error-dark: #F87171;
+
+  /* ── Typography ── */
+  --font-display: "Fraunces", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* ── Border Radius ── */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* ── Shadows ── */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.03);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.06);
+  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 12px 32px -8px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 48px -12px rgb(0 0 0 / 0.15);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --nv-canvas: #0F172A;
-    --nv-canvas-2: #1E293B;
-    --nv-ink: #F8FAFC;
-    --nv-muted: #CBD5E1;
-    --nv-card: rgba(15, 23, 42, 0.84);
-    --nv-card-strong: rgba(15, 23, 42, 0.96);
-    --nv-border: rgba(148, 163, 184, 0.22);
-    --nv-shadow: rgba(0, 0, 0, 0.42);
-    --nv-accent: #38BDF8;
-    --nv-accent-2: #3B82F6;
-    --nv-accent-3: #60A5FA;
-    --nv-success: #34D399;
-    --nv-warning: #FBBF24;
-    --nv-error: #F87171;
-  }
+/* ═══════════════════════════════════════════════════════════════════════════
+   LIGHT MODE (default)
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  --nv-base: #FAFBFC;
+  --nv-surface: #FFFFFF;
+  --nv-surface-subtle: #F1F5F9;
+  --nv-border: #E2E8F0;
+  --nv-border-strong: #CBD5E1;
+  --nv-text: #0B1420;
+  --nv-text-secondary: #475569;
+  --nv-text-muted: #94A3B8;
+  --nv-primary: #1E3A5F;
+  --nv-primary-hover: #162D4A;
+  --nv-accent: #2563EB;
+  --nv-accent-hover: #1D4ED8;
+  --nv-accent-subtle: #EFF6FF;
+  --nv-success: #059669;
+  --nv-warning: #D97706;
+  --nv-error: #DC2626;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DARK MODE — triggered by .dark class (fixes broken manual toggle)
+   Also respects system preference as default via JS in layout.js
+   ═══════════════════════════════════════════════════════════════════════════ */
+.dark {
+  --nv-base: #0B1120;
+  --nv-surface: #131C2E;
+  --nv-surface-subtle: #1A2744;
+  --nv-border: #1E2A45;
+  --nv-border-strong: #2D3A5E;
+  --nv-text: #F1F5F9;
+  --nv-text-secondary: #94A3B8;
+  --nv-text-muted: #64748B;
+  --nv-primary: #3B82F6;
+  --nv-primary-hover: #60A5FA;
+  --nv-accent: #60A5FA;
+  --nv-accent-hover: #93C5FD;
+  --nv-accent-subtle: #1E3A5F;
+  --nv-success: #34D399;
+  --nv-warning: #FBBF24;
+  --nv-error: #F87171;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DESIGN TOKEN ALIASES
+   Backwards-compatible aliases for components still using old var(--nv-*) names.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --nv-ink: var(--color-nv-text);
+  --nv-muted: var(--color-nv-text-muted);
+  --nv-accent-2: var(--color-nv-accent);
+  --nv-canvas: var(--color-nv-base);
+  --nv-shadow: rgba(11, 20, 32, 0.12);
+}
+
+.dark {
+  --nv-ink: var(--color-nv-text);
+  --nv-muted: var(--color-nv-text-muted);
+  --nv-accent-2: var(--color-nv-accent);
+  --nv-canvas: var(--color-nv-base);
+  --nv-shadow: rgba(0, 0, 0, 0.42);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 .nv-display {
   font-family: var(--font-display), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
@@ -46,15 +148,14 @@
 }
 
 .nv-surface {
-  background: var(--nv-card);
+  background: var(--nv-surface);
   border: 1px solid var(--nv-border);
-  box-shadow: 0 24px 60px -40px var(--nv-shadow);
-  backdrop-filter: blur(16px);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06);
 }
 
 .nv-page {
   background: transparent;
-  color: var(--nv-ink);
+  color: var(--nv-text);
 }
 
 .nv-container {
@@ -66,18 +167,17 @@
 }
 
 .nv-card {
-  background: var(--nv-card);
+  background: var(--nv-surface);
   border: 1px solid var(--nv-border);
-  box-shadow: 0 24px 60px -40px var(--nv-shadow);
-  backdrop-filter: blur(16px);
-  @apply rounded-3xl p-5 sm:p-6;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06);
+  @apply rounded-xl p-5 sm:p-6;
 }
 
 .nv-card-solid {
-  background: var(--nv-card-strong);
-  border: 1px solid rgba(15, 23, 42, 0.10);
-  box-shadow: 0 10px 30px -22px rgba(2, 6, 23, 0.24);
-  @apply rounded-3xl p-5 sm:p-6;
+  background: var(--nv-surface);
+  border: 1px solid var(--nv-border);
+  box-shadow: 0 4px 12px -2px rgb(0 0 0 / 0.08);
+  @apply rounded-xl p-5 sm:p-6;
 }
 
 .nv-section {
@@ -86,12 +186,16 @@
 
 .nv-h1 {
   font-family: var(--font-display), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  @apply text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl md:text-5xl;
+  @apply text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl;
+  color: var(--nv-text);
 }
 
 .nv-lead {
-  @apply text-base leading-7 text-slate-600 sm:text-lg;
+  @apply text-base leading-relaxed sm:text-lg;
+  color: var(--nv-text-secondary);
 }
+
+/* ── Animations ── */
 
 @keyframes nv-float {
   0% { transform: translate3d(0, 0, 0) }
@@ -103,58 +207,6 @@
   animation: nv-float 8s ease-in-out infinite;
 }
 
-/* Remove default browser margins */
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
-
-body {
-  font-family: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  background: var(--nv-canvas);
-  color: var(--nv-ink);
-  padding-bottom: 2rem;
-}
-
-::selection {
-  background: color-mix(in oklab, var(--nv-accent-2) 32%, transparent);
-  color: var(--nv-ink);
-}
-
-:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--nv-accent-2) 22%, transparent);
-}
-
-.nv-route-chrome {
-  position: relative;
-}
-
-.nv-route-ornament {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background:
-    radial-gradient(900px 500px at 10% 0%, color-mix(in oklab, var(--nv-accent-2) 18%, transparent) 0%, transparent 62%),
-    radial-gradient(800px 480px at 92% 10%, color-mix(in oklab, var(--nv-accent) 16%, transparent) 0%, transparent 58%),
-    radial-gradient(760px 460px at 50% 100%, color-mix(in oklab, var(--nv-accent-3) 14%, transparent) 0%, transparent 55%),
-    repeating-linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.035) 0px,
-      rgba(255, 255, 255, 0.035) 1px,
-      transparent 1px,
-      transparent 12px
-    );
-  mix-blend-mode: normal;
-  opacity: 0.9;
-}
-
-.nv-route-content {
-  position: relative;
-  z-index: 1;
-}
 @keyframes slide-up {
   from {
     transform: translateY(20px);
@@ -185,7 +237,57 @@ body {
   animation: slide-in 0.3s ease-out;
 }
 
-/* Reduced motion support */
+/* ── Base Styles ── */
+
+/* Remove default browser margins */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--nv-base);
+  color: var(--nv-text);
+  padding-bottom: 2rem;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--nv-accent) 22%, transparent);
+  color: var(--nv-text);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--nv-accent) 30%, transparent);
+}
+
+/* ── Route Chrome (page background ornament) ── */
+
+.nv-route-chrome {
+  position: relative;
+}
+
+.nv-route-ornament {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(900px 500px at 10% 0%, color-mix(in oklab, var(--nv-accent) 10%, transparent) 0%, transparent 62%),
+    radial-gradient(800px 480px at 92% 10%, color-mix(in oklab, var(--nv-primary) 8%, transparent) 0%, transparent 58%);
+  mix-blend-mode: normal;
+  opacity: 0.7;
+}
+
+.nv-route-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Reduced Motion ── */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -204,7 +306,8 @@ body {
   transition-duration: 0.01ms !important;
 }
 
-/* AdSense responsive container with CLS prevention */
+/* ── Ad Containers (CLS prevention) ── */
+
 .adsbygoogle {
   transition: min-height 0.3s ease-out;
 }
@@ -222,14 +325,12 @@ body {
   padding: 0;
 }
 
-/* Prevent layout shift for ads - reserve space only when loaded */
 .ad-container:not(.invisible) {
   min-height: var(--ad-min-height, auto);
   max-height: 200px;
   overflow: hidden;
 }
 
-/* Multiplex ad responsive sizing */
 @media (max-width: 768px) {
   .adsbygoogle[data-ad-format="autorelaxed"] {
     max-width: 100% !important;
@@ -242,9 +343,6 @@ body {
   }
 }
 
-/* Dark mode ad styling */
-@media (prefers-color-scheme: dark) {
-  .adsbygoogle {
-    background-color: transparent;
-  }
+.dark .adsbygoogle {
+  background-color: transparent;
 }

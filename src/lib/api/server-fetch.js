@@ -18,7 +18,10 @@
  */
 
 const API_BASE = (process.env.NEXT_PUBLIC_API_BASE || 'https://name-meaning-site-backend.vercel.app').replace(/\/+$/, '');
-const ISR_TTL = 31536000; // 365 days
+const ISR_TTL = 2592000; // 30 days
+
+const NAME_TAG = 'name-data';
+const slugTimestampCache = new Map();
 
 // Reuse the canonical slug builder so similar-name strings are normalized the
 // exact same way the rest of the app links to them.
@@ -44,10 +47,11 @@ function normalizeReligion(val) {
  *
  * IMPORTANT: This function NEVER caches failed responses to prevent ISR poisoning.
  */
-async function safeFetch(url, retries = 2, revalidate = ISR_TTL) {
+async function safeFetch(url, retries = 2, revalidate = ISR_TTL, tags = []) {
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const res = await fetch(url, { next: { revalidate } });
+      const fetchOptions = { next: { revalidate, tags } };
+      const res = await fetch(url, fetchOptions);
 
       // Explicit 404 - backend confirms resource doesn't exist
       if (res.status === 404) {
@@ -82,10 +86,9 @@ async function safeFetch(url, retries = 2, revalidate = ISR_TTL) {
  * IMPORTANT: Never use revalidate: 0 as it causes "Dynamic server usage"
  * errors during static generation. Always use a positive revalidation time.
  */
-async function isrFetchWithRetry(url, retries = 2, revalidate = ISR_TTL) {
+async function isrFetchWithRetry(url, retries = 2, revalidate = ISR_TTL, tags = []) {
   for (let attempt = 0; attempt <= retries; attempt++) {
-    // Use the same revalidate on all attempts to avoid overriding page-level ISR cache
-    const result = await safeFetch(url, 0, revalidate);
+    const result = await safeFetch(url, 0, revalidate, tags);
     if (result.data || result.notFound) return result;
     if (attempt < retries) {
       await new Promise(r => setTimeout(r, 200 * (attempt + 1)));
@@ -234,13 +237,14 @@ export async function serverFetchNameDetail(religion, slug) {
   const normalizedReligion = normalizeReligion(religion);
   const safeSlug = encodeURIComponent(String(slug).trim().toLowerCase());
 
-  // Use retry + 365-day cache for name detail lookups.
+  // Use retry + 1-hour cache for name detail lookups.
   // A single transient error must NOT cause a permanent 404.
-  // 365-day cache is free-tier friendly: each function call is cached for 365 days.
+  // Tagged for on-demand revalidation via webhook.
   let result = await isrFetchWithRetry(
     `${API_BASE}/api/v1/names/${normalizedReligion}/${safeSlug}`,
     2,
-    ISR_TTL
+    ISR_TTL,
+    [NAME_TAG]
   );
 
   // If explicit 404 from primary endpoint, return confirmed 404 (content doesn't exist)
@@ -253,7 +257,8 @@ export async function serverFetchNameDetail(religion, slug) {
     const fallbackResult = await isrFetchWithRetry(
       `${API_BASE}/api/names/${normalizedReligion}/${safeSlug}`,
       1,
-      ISR_TTL
+      ISR_TTL,
+      [NAME_TAG]
     );
 
     // If fallback also returns explicit 404, propagate it
@@ -272,6 +277,19 @@ export async function serverFetchNameDetail(religion, slug) {
 
   if (result.data?.success && result.data?.data) {
     const nameData = result.data.data;
+    const updatedAt = nameData.updated_at || nameData.lastUpdated || null;
+
+    if (updatedAt) {
+      const cacheKey = `${normalizedReligion}:${safeSlug}`;
+      const cachedTimestamp = slugTimestampCache.get(cacheKey);
+      if (cachedTimestamp && cachedTimestamp !== updatedAt) {
+        console.log(`[cache-invalidate] Name ${cacheKey} updated at ${updatedAt} (was ${cachedTimestamp})`);
+        slugTimestampCache.set(cacheKey, updatedAt);
+      } else if (!cachedTimestamp) {
+        slugTimestampCache.set(cacheKey, updatedAt);
+      }
+    }
+
     // Normalize religion (handle "Islam", "Christian", "Hindu" as well)
     if (nameData.religion) {
       const r = String(nameData.religion).toLowerCase();
@@ -358,7 +376,10 @@ export async function serverFetchTrendingNames(options = {}) {
 export async function serverFetchRelatedNames(religion, slug) {
   if (!religion || !slug) return { data: [], count: 0, success: true, error: false };
 
-  const result = await safeFetch(`${API_BASE}/api/names/religion/islamic/1/related`);
+  const normalizedReligion = normalizeReligion(religion);
+  const safeSlug = encodeURIComponent(String(slug).trim().toLowerCase());
+
+  const result = await safeFetch(`${API_BASE}/api/names/${normalizedReligion}/${safeSlug}/related`);
 
   if (result.error || result.notFound) {
     return { data: [], count: 0, success: true, error: result.error };
@@ -383,7 +404,10 @@ export async function serverFetchRelatedNames(religion, slug) {
 export async function serverFetchSimilarNames(religion, slug) {
   if (!religion || !slug) return { data: [], count: 0, success: true, error: false };
 
-  const result = await safeFetch(`${API_BASE}/api/names/religion/islamic/1/similar`);
+  const normalizedReligion = normalizeReligion(religion);
+  const safeSlug = encodeURIComponent(String(slug).trim().toLowerCase());
+
+  const result = await safeFetch(`${API_BASE}/api/names/${normalizedReligion}/${safeSlug}/similar`);
 
   if (result.error || result.notFound) {
     return { data: [], count: 0, success: true, error: result.error };

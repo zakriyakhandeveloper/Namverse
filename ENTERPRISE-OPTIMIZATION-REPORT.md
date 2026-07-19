@@ -1097,15 +1097,15 @@ npm run build
 npm run start
 
 # 5. Verify redirects
-curl -I "https://nameverse.vercel.app/Names/Islamic/Abdullah/"
+curl -I "https://nameverse.site/Names/Islamic/Abdullah/"
 # Expect: 301 to /names/islamic/abdullah
 
 # 6. Verify robots.txt
-curl "https://nameverse.vercel.app/robots.txt"
+curl "https://nameverse.site/robots.txt"
 # Expect: Allow rules for /_next/static/
 
 # 7. Verify sitemap
-curl "https://nameverse.vercel.app/sitemap.xml"
+curl "https://nameverse.site/sitemap.xml"
 # Expect: No /meaning/, /stories/, /religions/ URLs
 ```
 
@@ -1119,7 +1119,7 @@ vercel --prod
 vercel logs <deployment-url>
 
 # Verify live site
-curl -I https://nameverse.vercel.app/names/islamic/ismail
+curl -I https://nameverse.site/names/islamic/ismail
 # Expect: 200 with canonical tag
 ```
 

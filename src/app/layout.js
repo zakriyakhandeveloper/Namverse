@@ -2,16 +2,16 @@ import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import AppInstallPopup from "./install";
-import { Fraunces, Instrument_Sans } from 'next/font/google';
+import { Fraunces, Inter } from 'next/font/google';
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 import ResourceHints from "@/components/Performance/ResourceHints";
-import PerformanceInit from "./performance";
 import StructuredData from "@/components/SEO/StructuredData";
 import GoogleBotMeta from "@/components/SEO/GoogleBotMeta";
 import { validateMetaTitle, validateMetaDescription } from '@/lib/seo/meta-helpers';
 import { AppProvider } from "@/contexts/AppContext";
 import LoadingWrapper from "@/components/LoadingAnimation/LoadingWrapper";
 import { Suspense } from 'react';
+import Script from 'next/script';
 import RouteChrome from "@/components/Layout/RouteChrome";
 import NativeAdScript from "@/components/Ads/NativeAdScript";
 
@@ -27,10 +27,10 @@ const displayFont = Fraunces({
   preload: true,
 });
 
-const bodyFont = Instrument_Sans({
+const bodyFont = Inter({
   subsets: ['latin'],
   variable: '--font-body',
-  weight: ['400', '600'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
   preload: true,
 });
@@ -50,7 +50,6 @@ export const metadata = {
   creator: "NameVerse",
   publisher: "NameVerse",
   metadataBase: new URL(siteUrl),
-  alternates: { canonical: siteUrl },
   openGraph: {
     title: validateMetaTitle("Baby Names, Meanings, Origins & Lucky Numbers | NameVerse"),
     description: validateMetaDescription(
@@ -82,14 +81,11 @@ export const metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/icon.svg', type: 'image/svg+xml' },
-      { url: '/logo.png', sizes: '192x192', type: 'image/png' },
-      { url: '/logo.png', sizes: '512x512', type: 'image/png' },
+      { url: '/logo.svg', type: 'image/svg+xml' },
     ],
-    shortcut: '/favicon.ico',
+    shortcut: '/logo.svg',
     apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: '/logo.svg', type: 'image/svg+xml', sizes: '180x180' },
     ],
   },
   manifest: `/manifest.json`,
@@ -102,7 +98,7 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 5,
   viewportFit: "cover",
-  themeColor: "#1E40AF",
+  themeColor: "#1E3A5F",
 };
 
 export default function RootLayout({ children }) {
@@ -113,28 +109,28 @@ export default function RootLayout({ children }) {
         <meta name="application-name" content="NameVerse" />
         <meta property="og:site_name" content="NameVerse" />
         <meta name="content-language" content="en" />
-        <meta name="theme-color" content="#4F46E5" />
+        <meta name="theme-color" content="#1E3A5F" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="google-site-verification" content="iPU1wdP26kg58gDN3U4H39YuS20alsLvjfXRM-QtKLw" />
+        <meta name="google-site-verification" content="YpyQkTA9hX2f0MgD5oN8mVvssqJOD4L96gJn2yRzc3k" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-title" content="NameVerse" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="msapplication-TileColor" content="#4F46E5" />
-        <meta name="msapplication-TileImage" content="/logo.png" />
-        <link rel="apple-touch-icon" href="/logo.png" />
+        <meta name="msapplication-TileColor" content="#1E3A5F" />
+        <meta name="msapplication-TileImage" content="/logo.svg" />
+        <link rel="apple-touch-icon" href="/logo.svg" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="ahrefs-site-verification" content="650afaf6635223ff618a281883a22b69b937a121e933b19907debeca67754cd4" />
         <meta name="415fb3e376dd03499e3ea3cfd086272b2330a942" content="415fb3e376dd03499e3ea3cfd086272b2330a942" />
         <meta name="p:domain_verify" content="2182ce49319a6b4ede3da073a469ce4a" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1510675468129183" crossorigin="anonymous"></script>
 
         <link rel="preconnect" href="https://revolthem.com" />
         <link rel="dns-prefetch" href="https://revolthem.com" />
 
         <ResourceHints />
 
-        <link rel="icon" type="image/png" href="/logo.png" />
-        <link rel="shortcut icon" type="image/png" href="/logo.png" />
+        <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+        <link rel="shortcut icon" type="image/svg+xml" href="/logo.svg" />
 
         <GoogleBotMeta siteUrl={siteUrl} />
 
@@ -157,21 +153,28 @@ export default function RootLayout({ children }) {
       <body className={`${bodyFont.variable} ${displayFont.variable} antialiased nv-body nv-page`}>
         <div id="temp-wrapper">
           <AppProvider>
-            <PerformanceInit />
             <Suspense fallback={<div>Loading Navbar...</div>}>
               <Navbar />
             </Suspense>
 
             <NativeAdScript />
 
-            {/* TOP NATIVE AD */}
-            <div id="container-1606e7870f004d67136f85f2b1698cd3"></div>
+            {/* DESKTOP 4:1 AD — Desktop only */}
+            <div id="container-desktop-4x1" className="hidden lg:block" />
+
+            {/* MOBILE NATIVE BANNER — Mobile only */}
+            <div id="container-1606e7870f004d67136f85f2b1698cd3" className="lg:hidden" />
 
             <RouteChrome>{children}</RouteChrome>
 
             <Footer />
             <AppInstallPopup />
 
+            <Script
+              id="adsbygoogle"
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1510675468129183"
+              strategy="afterInteractive"
+            />
 
           </AppProvider>
         </div>

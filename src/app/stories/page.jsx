@@ -1,3 +1,5 @@
+export const revalidate = 31536000; // 365 days
+
 import Link from 'next/link';
 import Script from 'next/script';
 import { Calendar, Clock, ChevronRight, BookOpen } from 'lucide-react';

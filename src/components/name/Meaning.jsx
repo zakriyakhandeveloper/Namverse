@@ -31,8 +31,8 @@ function getReligionLabel(religion) {
 
 function getGenderLabel(gender) {
   const value = cleanText(gender).toLowerCase();
-  if (value.includes('male')) return 'Male';
-  if (value.includes('female')) return 'Female';
+  if (value.includes('male')) return 'Boy';
+  if (value.includes('female')) return 'Girl';
   if (value.includes('unisex') || value.includes('neutral')) return 'Unisex';
   return cleanText(gender) || 'Unisex';
 }
@@ -59,17 +59,9 @@ function getLanguages(data) {
 function getOriginTranslation(data) {
   const origin = cleanText(data.origin).toLowerCase();
   const originMap = {
-    arabic: 'in_arabic',
-    urdu: 'in_urdu',
-    hindi: 'in_hindi',
-    sanskrit: 'in_sanskrit',
-    english: 'in_english',
-    hebrew: 'in_hebrew',
-    greek: 'in_greek',
-    latin: 'in_latin',
-    biblical: 'in_greek',
-    persian: 'in_persian',
-    turkish: 'in_turkish',
+    arabic: 'in_arabic', urdu: 'in_urdu', hindi: 'in_hindi', sanskrit: 'in_sanskrit',
+    english: 'in_english', hebrew: 'in_hebrew', greek: 'in_greek', latin: 'in_latin',
+    biblical: 'in_greek', persian: 'in_persian', turkish: 'in_turkish',
   };
   const key = originMap[origin];
   if (key && data[key]) return { key, label: getLanguageName(key.replace('in_', '')), value: data[key] };
@@ -102,8 +94,6 @@ function getReferencePeriod(item) {
   return item && typeof item === 'object' ? cleanText(item.time_period) : '';
 }
 
-// Deterministic hash so the same name always gets the same filler variant
-// (stable across renders/SSG), but different names generally get different text.
 function hashString(str) {
   let hash = 0;
   const value = String(str || '');
@@ -116,13 +106,9 @@ function hashString(str) {
 
 function shouldShowHistoricalReference(ref) {
   const fakePhrases = [
-    'various islamic scholars',
-    'has been used throughout',
-    'faithful believers who exemplified',
-    'carried significant weight in that era',
-    'throughout islamic history',
-    'throughout christian history',
-    'throughout hindu history',
+    'various islamic scholars', 'has been used throughout',
+    'faithful believers who exemplified', 'carried significant weight in that era',
+    'throughout islamic history', 'throughout christian history', 'throughout hindu history',
   ];
 
   const refText = String(ref?.reference || ref?.notes || ref || '').toLowerCase();
@@ -151,10 +137,8 @@ function isGenericSpiritualSymbolism(data) {
 
 function isGenericModernUsage(modernContext) {
   const genericPhrases = [
-    'remains relevant in modern',
-    'representing a bridge between traditional',
-    'widely discussed on digital platforms',
-    'continues to be a popular choice',
+    'remains relevant in modern', 'representing a bridge between traditional',
+    'widely discussed on digital platforms', 'continues to be a popular choice',
     'is a name that embodies',
   ];
 
@@ -188,14 +172,14 @@ function buildSnippet(data) {
 
 function SectionHeading({ icon: Icon, eyebrow, title, description }) {
   return (
-    <div className="mb-5 flex items-start gap-3 text-slate-900">
+    <div className="mb-5 flex items-start gap-3">
       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 shadow-sm">
         <Icon className="h-5 w-5" />
       </div>
       <div>
-        {eyebrow && <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{eyebrow}</p>}
-        <h2 className="text-xl font-semibold">{title}</h2>
-        {description && <p className="mt-1 text-sm text-slate-500">{description}</p>}
+        {eyebrow && <p className="text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">{eyebrow}</p>}
+        <h2 className="nv-display text-xl font-semibold text-[color:var(--nv-ink)]">{title}</h2>
+        {description && <p className="mt-1 text-sm text-[color:var(--nv-muted)]">{description}</p>}
       </div>
     </div>
   );
@@ -204,16 +188,56 @@ function SectionHeading({ icon: Icon, eyebrow, title, description }) {
 function TranslationCard({ language }) {
   if (!language?.value) return null;
   return (
-    <div className="nv-card-solid p-4">
-      <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-900">
+    <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4 transition hover:-translate-y-0.5 hover:shadow-md">
+      <div className="mb-2 flex items-center gap-2 text-sm font-bold text-[color:var(--nv-ink)]">
         <span>{language.flag}</span>
         <span>{language.name}</span>
       </div>
-      <p className="font-semibold text-slate-900">{language.value.name || 'Name translation'}</p>
-      {language.value.meaning ? <p className="mt-1 text-sm leading-6 text-slate-700">{language.value.meaning}</p> : null}
-      {language.value.long_meaning ? <p className="mt-2 text-sm leading-6 text-slate-600">{language.value.long_meaning}</p> : null}
+      <p className="font-semibold text-[color:var(--nv-ink)]">{language.value.name || 'Name translation'}</p>
+      {language.value.meaning ? <p className="mt-1 text-sm leading-6 text-[color:var(--nv-muted)]">{language.value.meaning}</p> : null}
+      {language.value.long_meaning ? <p className="mt-2 text-sm leading-6 text-[color:var(--nv-muted)]">{language.value.long_meaning}</p> : null}
     </div>
   );
+}
+
+function InfoTile({ label, value }) {
+  return (
+    <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4">
+      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">{label}</p>
+      <p className="mt-1.5 text-base font-semibold text-[color:var(--nv-ink)] leading-snug">{value}</p>
+    </div>
+  );
+}
+
+function StatTile({ label, value, icon: Icon }) {
+  return (
+    <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4 text-center transition hover:-translate-y-0.5 hover:shadow-md">
+      <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
+        <Icon className="h-5 w-5" />
+      </div>
+      <div className="text-base font-semibold text-[color:var(--nv-ink)]">{value}</div>
+      <div className="mt-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">{label}</div>
+    </div>
+  );
+}
+
+function Chip({ children, href, variant = 'default' }) {
+  const base = 'inline-flex items-center rounded-full px-3 py-1.5 text-sm font-medium transition';
+  const variants = {
+    default: `${base} border border-[color:var(--nv-border)] bg-white/60 text-[color:var(--nv-ink)] hover:border-[color:var(--nv-accent-2)] hover:text-[color:var(--nv-accent-2)]`,
+    accent: `${base} bg-[color:var(--nv-accent-2)] text-white hover:bg-[color:var(--nv-accent)]`,
+    muted: `${base} bg-white/60 text-[color:var(--nv-muted)]`,
+  };
+
+  if (href) {
+    return (
+      <Link href={href} className={variants[variant]}>
+        {children}
+      </Link>
+    );
+  }
+
+  return <span className={variants[variant]}>{children}</span>;
 }
 
 export default function LinguisticOriginPanel({ data, nativeBanner }) {
@@ -232,68 +256,60 @@ export default function LinguisticOriginPanel({ data, nativeBanner }) {
 
   return (
     <div className="nv-stack">
-      <section className="nv-card">
+      <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
         <SectionHeading icon={BookOpen} eyebrow="Quick Answer" title="Meaning Summary" description="A concise answer for featured snippets and voice search." />
-        <div className="rounded-3xl bg-amber-50 p-5 text-slate-800 ring-1 ring-amber-100">
-          <h3 className="text-lg font-semibold text-slate-900">What does {data.name} mean?</h3>
-          <p className="mt-2 leading-7">{buildSnippet(data)}</p>
+        <div className="rounded-2xl bg-amber-50/80 p-5 ring-1 ring-amber-100">
+          <h3 className="text-lg font-bold text-[color:var(--nv-ink)]">What does {data.name} mean?</h3>
+          <p className="mt-2 leading-7 text-[color:var(--nv-muted)]">{buildSnippet(data)}</p>
         </div>
       </section>
 
       {data.in_urdu && (
-        <section className="nv-card">
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
           <SectionHeading icon={Languages} eyebrow="Translation" title="Meaning in Urdu" />
           <TranslationCard language={{ code: 'urdu', flag: getLanguageFlag('urdu'), name: 'Urdu', value: data.in_urdu }} />
         </section>
       )}
 
       {originTranslation && (
-        <section className="nv-card">
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
           <SectionHeading icon={Globe} eyebrow="Source Language" title={`Meaning in ${originTranslation.label}`} description={`${originTranslation.label} is used to show the source-language meaning and cultural nuance.`} />
           <TranslationCard language={originTranslation} />
         </section>
       )}
 
-      <section className="nv-card">
+      <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
         <SectionHeading icon={Volume2} eyebrow="Pronunciation" title="How to Pronounce the Name" />
         <div className="grid gap-4 md:grid-cols-2">
           {data.pronunciation?.english && (
-            <div className="rounded-3xl border border-slate-100 bg-slate-50 p-4">
-              <p className="text-sm uppercase tracking-[0.18em] text-slate-500">English Pronunciation</p>
-              <p className="mt-2 text-2xl font-semibold text-slate-900">{data.pronunciation.english}</p>
+            <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4">
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">English Pronunciation</p>
+              <p className="mt-2 text-2xl font-semibold text-[color:var(--nv-ink)]">{data.pronunciation.english}</p>
             </div>
           )}
           {data.pronunciation?.ipa && (
-            <div className="rounded-3xl border border-slate-100 bg-slate-50 p-4">
-              <p className="text-sm uppercase tracking-[0.18em] text-slate-500">IPA</p>
-              <p className="mt-2 text-xl font-semibold text-slate-900">{data.pronunciation.ipa}</p>
+            <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4">
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">IPA</p>
+              <p className="mt-2 text-xl font-semibold text-[color:var(--nv-ink)]">{data.pronunciation.ipa}</p>
             </div>
           )}
-          {!pronunciation && <p className="text-slate-700">NameVerse does not list a pronunciation guide for this name.</p>}
+          {!pronunciation && <p className="text-[color:var(--nv-muted)]">NameVerse does not list a pronunciation guide for this name.</p>}
         </div>
       </section>
 
-      <section className="nv-card">
+      <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
         <SectionHeading icon={Globe} eyebrow="Origin" title="Name Origin" />
         <div className="space-y-3">
-          <div className="rounded-3xl bg-slate-50 p-4">
-            <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Root Origin</p>
-            <p className="text-slate-900 font-medium">{origin}</p>
-          </div>
+          <InfoTile label="Root Origin" value={origin} />
           {data.language_family || data.origin_language ? (
-            <div className="rounded-3xl bg-slate-50 p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Source Language</p>
-              <p className="text-slate-900 font-medium">{data.language_family || data.origin_language}</p>
-            </div>
+            <InfoTile label="Source Language" value={data.language_family || data.origin_language} />
           ) : null}
           {languages.length > 0 && (
-            <div className="rounded-3xl bg-slate-50 p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-slate-500 mb-3">Language Usage</p>
+            <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4">
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)] mb-3">Language Usage</p>
               <div className="flex flex-wrap gap-2">
                 {languages.map((language) => (
-                  <span key={language.code} className="rounded-full bg-white px-3 py-1 text-sm text-slate-700 ring-1 ring-slate-200">
-                    {language.name}
-                  </span>
+                  <span key={language.code} className="rounded-full border border-[color:var(--nv-border)] bg-white/60 px-3 py-1 text-sm text-[color:var(--nv-ink)]">{language.name}</span>
                 ))}
               </div>
             </div>
@@ -301,106 +317,106 @@ export default function LinguisticOriginPanel({ data, nativeBanner }) {
         </div>
       </section>
 
-      <section className="nv-card">
+      <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
         <SectionHeading icon={Shield} eyebrow="Religion" title={`${religionLabel} Name Context`} />
-        <div className="rounded-3xl bg-slate-50 p-4 leading-7 text-slate-700">
+        <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4 leading-7 text-[color:var(--nv-muted)]">
           {data.name} is listed as a {religionLabel.toLowerCase()} {genderLabel.toLowerCase()} name with {origin} origin. Its meaning is {meaning}.
           {data.category ? ` Category: ${data.category}.` : ''}
         </div>
       </section>
 
       {(luckyNumber || data.lucky_day || luckyColors.length > 0 || data.lucky_stone || lifePathNumber) && (
-        <section className="nv-card-solid">
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
           <SectionHeading icon={Sparkles} eyebrow="Lucky Details" title="Lucky Number, Day and Color" />
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {luckyNumber && (
-              <div className="rounded-3xl border border-slate-100 bg-slate-50 p-4">
-                <p className="text-sm uppercase tracking-[0.18em] text-slate-500">Lucky Number</p>
-                <p className="mt-2 text-3xl font-semibold text-slate-900">{luckyNumber}</p>
+              <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">Lucky Number</p>
+                <p className="mt-2 text-3xl font-semibold text-[color:var(--nv-ink)]">{luckyNumber}</p>
               </div>
             )}
             {data.lucky_day && (
-              <div className="rounded-3xl border border-slate-100 bg-slate-50 p-4">
-                <p className="text-sm uppercase tracking-[0.18em] text-slate-500">Lucky Day</p>
-                <p className="mt-2 text-2xl font-semibold text-slate-900">{data.lucky_day}</p>
+              <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">Lucky Day</p>
+                <p className="mt-2 text-2xl font-semibold text-[color:var(--nv-ink)]">{data.lucky_day}</p>
               </div>
             )}
             {luckyColors.length > 0 && (
-              <div className="rounded-3xl border border-slate-100 bg-slate-50 p-4">
-                <p className="text-sm uppercase tracking-[0.18em] text-slate-500">Lucky Colors</p>
+              <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">Lucky Colors</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {luckyColors.map((color) => (
-                    <span key={color} className="rounded-full bg-white px-3 py-1 text-sm text-slate-700 ring-1 ring-slate-200">{color}</span>
+                    <span key={color} className="rounded-full border border-[color:var(--nv-border)] bg-white/60 px-3 py-1 text-sm text-[color:var(--nv-ink)]">{color}</span>
                   ))}
                 </div>
               </div>
             )}
             {data.lucky_stone && (
-              <div className="rounded-3xl border border-slate-100 bg-slate-50 p-4">
-                <p className="text-sm uppercase tracking-[0.18em] text-slate-500">Lucky Stone</p>
-                <p className="mt-2 text-lg font-semibold text-slate-900">{data.lucky_stone}</p>
+              <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">Lucky Stone</p>
+                <p className="mt-2 text-lg font-semibold text-[color:var(--nv-ink)]">{data.lucky_stone}</p>
               </div>
             )}
             {lifePathNumber && (
-              <div className="rounded-3xl border border-slate-100 bg-slate-50 p-4">
-                <p className="text-sm uppercase tracking-[0.18em] text-slate-500">Life Path Number</p>
-                <p className="mt-2 text-2xl font-semibold text-slate-900">{lifePathNumber}</p>
+              <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4">
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">Life Path Number</p>
+                <p className="mt-2 text-2xl font-semibold text-[color:var(--nv-ink)]">{lifePathNumber}</p>
               </div>
             )}
           </div>
           {numerologyMeaning && (
-            <div className="mt-4 rounded-3xl bg-amber-50 p-4 text-sm leading-6 text-slate-700">
-              <span className="font-semibold text-slate-900">Numerology meaning:</span> {numerologyMeaning}
+            <div className="mt-4 rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4 text-sm leading-6 text-[color:var(--nv-muted)]">
+              <span className="font-semibold text-[color:var(--nv-ink)]">Numerology meaning:</span> {numerologyMeaning}
             </div>
           )}
         </section>
       )}
 
       {traits.length > 0 && (
-        <section className="nv-card">
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
           <SectionHeading icon={Heart} eyebrow="Personality" title="Personality Traits" />
           <div className="flex flex-wrap gap-2">
             {traits.map((trait) => (
-              <span key={trait} className="rounded-full bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-800 ring-1 ring-emerald-100">{trait}</span>
+              <span key={trait} className="rounded-full border border-[color:var(--nv-border)] bg-white/60 px-3 py-2 text-sm font-medium text-[color:var(--nv-ink)]">{trait}</span>
             ))}
           </div>
         </section>
       )}
 
       {data.spiritual_meaning && (
-        <section className="nv-card">
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
           <SectionHeading icon={BookText} eyebrow="Spiritual" title="Spiritual Significance" />
-          <div className="rounded-3xl bg-amber-50 p-4 text-slate-800 leading-7">
+          <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4 text-[color:var(--nv-muted)] leading-7">
             {data.spiritual_meaning}
           </div>
         </section>
       )}
 
       {(data.cultural_impact || data.spiritual_significance || data.islamic_reference || data.vedic_reference || data.biblical_reference || data.saint_reference) && (
-        <section className="nv-card">
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
           <SectionHeading icon={Shield} eyebrow="Cultural Context" title="Cultural Significance" />
-          <div className="space-y-4 text-slate-700 leading-7">
-            {data.cultural_impact && <div className="rounded-3xl bg-slate-50 p-4">{data.cultural_impact}</div>}
-            {data.spiritual_significance && <div className="rounded-3xl bg-slate-50 p-4">{data.spiritual_significance}</div>}
+          <div className="space-y-3 text-[color:var(--nv-muted)] leading-7">
+            {data.cultural_impact && <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4">{data.cultural_impact}</div>}
+            {data.spiritual_significance && <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4">{data.spiritual_significance}</div>}
             {data.islamic_reference && (
-              <p className="rounded-3xl bg-emerald-50 p-4 text-sm text-emerald-800">
+              <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-4 text-sm text-emerald-800">
                 {data.islamic_reference.is_quranic ? 'Quranic Arabic origin' : 'Traditional Islamic naming context'}{data.islamic_reference.note ? ` — ${data.islamic_reference.note}` : ''}
-              </p>
+              </div>
             )}
             {data.vedic_reference && (
-              <p className="rounded-3xl bg-amber-50 p-4 text-sm text-amber-800">
+              <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-4 text-sm text-amber-800">
                 {data.vedic_reference.is_vedic ? 'Vedic Sanskrit origin' : 'Cultural Hindu name'}{data.vedic_reference.root_origin ? ` · Root: ${data.vedic_reference.root_origin}` : ''}{data.vedic_reference.note ? ` · ${data.vedic_reference.note}` : ''}
-              </p>
+              </div>
             )}
             {data.biblical_reference?.is_biblical && data.biblical_reference?.verse_reference && (
-              <p className="rounded-3xl bg-blue-50 p-4 text-sm text-blue-800">
+              <div className="rounded-2xl border border-blue-200 bg-blue-50/60 p-4 text-sm text-blue-800">
                 Biblical reference: {data.biblical_reference.verse_reference}{data.biblical_reference.note ? ` — ${data.biblical_reference.note}` : ''}
-              </p>
+              </div>
             )}
             {data.saint_reference?.is_saint_name && data.saint_reference?.saint_name && (
-              <p className="rounded-3xl bg-purple-50 p-4 text-sm text-purple-800">
+              <div className="rounded-2xl border border-purple-200 bg-purple-50/60 p-4 text-sm text-purple-800">
                 Saint connection: {data.saint_reference.saint_name}{data.saint_reference.note ? ` — ${data.saint_reference.note}` : ''}
-              </p>
+              </div>
             )}
           </div>
         </section>
@@ -412,17 +428,17 @@ export default function LinguisticOriginPanel({ data, nativeBanner }) {
         const validRefs = data.historical_references.filter(ref => shouldShowHistoricalReference(ref));
         if (validRefs.length === 0) return null;
         return (
-          <section className="nv-card">
+          <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
             <SectionHeading icon={Clock} eyebrow="Historical Usage" title="Historical References" />
-            <div className="space-y-4">
+            <div className="space-y-3">
               {validRefs.map((item, idx) => {
                 const refText = getReferenceText(item);
                 const refPeriod = getReferencePeriod(item);
                 if (!refText) return null;
                 return (
-                  <div key={idx} className="rounded-3xl border border-slate-100 bg-slate-50 p-4">
-                    <p className="text-sm leading-6 text-slate-700">{refText}</p>
-                    {refPeriod && <p className="mt-2 text-xs uppercase tracking-[0.18em] text-slate-500">{refPeriod}</p>}
+                  <div key={idx} className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4 transition hover:-translate-y-0.5 hover:shadow-md">
+                    <p className="text-sm leading-6 text-[color:var(--nv-muted)]">{refText}</p>
+                    {refPeriod && <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">{refPeriod}</p>}
                   </div>
                 );
               })}
@@ -432,31 +448,31 @@ export default function LinguisticOriginPanel({ data, nativeBanner }) {
       })()}
 
       {data.spiritual_symbolism && !isGenericSpiritualSymbolism(data) && (
-        <section className="nv-card">
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
           <SectionHeading icon={Sparkles} eyebrow="Spiritual" title="Spiritual Symbolism" />
-          <div className="rounded-3xl bg-amber-50 p-4 text-slate-800 leading-7">
+          <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4 text-[color:var(--nv-muted)] leading-7">
             {data.spiritual_symbolism}
           </div>
         </section>
       )}
 
       {data.modern_usage && !isGenericModernUsage(data.modern_usage?.modern_context) && (
-        <section className="nv-card">
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
           <SectionHeading icon={TrendingUp} eyebrow="Modern Usage" title="Modern Usage" />
-          <div className="rounded-3xl bg-slate-50 p-4 text-slate-700 leading-7">
+          <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4 text-[color:var(--nv-muted)] leading-7">
             {data.modern_usage.modern_context || JSON.stringify(data.modern_usage)}
           </div>
         </section>
       )}
 
       {hasRealPopularityData(data.popularity_by_region) && (
-        <section className="nv-card">
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
           <SectionHeading icon={TrendingUp} eyebrow="Popularity" title="Popularity by Region" />
-          <div className="rounded-3xl bg-slate-50 p-4 text-slate-700 leading-7">
+          <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4 text-[color:var(--nv-muted)] leading-7">
             {data.popularity_by_region.map((region, idx) => (
-              <div key={idx} className="flex justify-between py-2 border-b border-slate-200 last:border-0">
-                <span className="font-medium">{region.region || region.country || 'Region'}</span>
-                <span className="text-slate-600">Score: {region.score}</span>
+              <div key={idx} className="flex justify-between py-2.5 border-b border-[color:var(--nv-border)] last:border-0">
+                <span className="font-semibold text-[color:var(--nv-ink)]">{region.region || region.country || 'Region'}</span>
+                <span className="text-[color:var(--nv-muted)]">Score: {region.score}</span>
               </div>
             ))}
           </div>
@@ -470,13 +486,13 @@ export default function LinguisticOriginPanel({ data, nativeBanner }) {
         });
         if (realCelebrities.length === 0) return null;
         return (
-          <section className="nv-card">
+          <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
             <SectionHeading icon={Award} eyebrow="Famous People" title="Famous People and Real-World Usage" />
-            <p className="text-xs uppercase tracking-[0.18em] text-slate-500 mb-3">Historical Figures & Cultural References</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)] mb-3">Historical Figures & Cultural References</p>
             <div className="flex flex-wrap gap-2">
               {realCelebrities.map((person, idx) => {
                 const label = typeof person === 'object' ? JSON.stringify(person) : person;
-                return <span key={idx} className="rounded-2xl bg-slate-100 px-3 py-2 text-sm text-slate-700">{label}</span>;
+                return <span key={idx} className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 px-3 py-2 text-sm text-[color:var(--nv-ink)]">{label}</span>;
               })}
             </div>
           </section>
@@ -484,18 +500,18 @@ export default function LinguisticOriginPanel({ data, nativeBanner }) {
       })()}
 
       {data.name_variations?.length > 0 && (
-        <section className="nv-card">
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
           <SectionHeading icon={Languages} eyebrow="Variations" title="Name Variations" />
           <div className="flex flex-wrap gap-2">
             {data.name_variations.map((variation, idx) => (
-              <span key={idx} className="rounded-2xl bg-indigo-50 px-3 py-2 text-sm text-indigo-800 ring-1 ring-indigo-100">{variation}</span>
+              <span key={idx} className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 px-3 py-2 text-sm text-[color:var(--nv-ink)]">{variation}</span>
             ))}
           </div>
         </section>
       )}
 
       {languages.length > 0 && (
-        <section className="nv-card-solid">
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
           <SectionHeading icon={Languages} eyebrow="Translations" title="Name Translations" description="Additional language translations available for this name." />
           <div className="grid gap-4 sm:grid-cols-2">
             {languages.map((language) => (

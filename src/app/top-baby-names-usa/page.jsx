@@ -1,3 +1,5 @@
+export const revalidate = 31536000; // 365 days
+
 import NameTable from "./NameTable";
 import {
   boysNames,
@@ -12,8 +14,10 @@ import {
   biggestFallersGirls,
 } from "../../data/top100Names2025";
 
+import { getSiteUrl } from '@/lib/seo/site';
+
 // ---- CONFIG: update these two if your domain changes ----
-const SITE_URL = "https://nameverse.vercel.app";
+const SITE_URL = getSiteUrl();
 const PAGE_PATH = "/top-baby-names-usa";
 // -----------------------------------------------------------
 

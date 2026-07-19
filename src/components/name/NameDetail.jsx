@@ -3,12 +3,10 @@ import LinguisticOriginPanel from './Meaning';
 import FAQ from './FAQ';
 import RelatedNames from './RelatedNames';
 import KnowledgeGraph from './KnowledgeGraph';
-import TopicClusterNav from './TopicClusterNav';
 import SitePage from '@/components/Layout/SitePage';
-import BlogSection from '@/components/Blog/BlogSection';
 import NativeBanner from '@/components/Ads/NativeBanner';
 import Link from 'next/link';
-import { ArrowRight, Search, Grid3X3, Sparkles, TrendingUp, Network, LayoutDashboard } from 'lucide-react';
+import { ArrowRight, Sparkles, Share2, Bookmark, TrendingUp } from 'lucide-react';
 import { createSafeSlug } from '@/lib/utils/createSafeSlug';
 
 function cleanText(text = '') {
@@ -45,46 +43,64 @@ function normalizeTrendingName(name, religion) {
   return { name: label, slug };
 }
 
+function QuickNav({ religion, genderPath, genderLabel, data }) {
+  const letter = cleanText(data.name).charAt(0).toUpperCase();
+  const originSlug = createSafeSlug(data.origin);
+
+  const links = [
+    ...(genderPath ? [{ label: `${genderLabel} Names`, href: genderPath, desc: 'Browse all' }] : []),
+    { label: `Letter ${letter}`, href: `/names/${religion}/letter/${letter}/1`, desc: 'Same starting letter' },
+    { label: data.origin || 'Origin', href: originSlug ? `/names/${religion}/origin/${originSlug}/1` : '#', desc: 'Same origin' },
+    { label: 'Search', href: '/search', desc: 'Find more names' },
+  ];
+
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      {links.map((link) => (
+        <Link
+          key={link.label}
+          href={link.href}
+          className="inline-flex items-center gap-2 rounded-full border border-[color:var(--nv-border)] bg-white/60 px-3.5 py-2 text-sm font-medium text-[color:var(--nv-ink)] transition hover:border-[color:var(--nv-accent-2)] hover:text-[color:var(--nv-accent-2)] hover:shadow-sm"
+        >
+          {link.label}
+          <span className="text-xs text-[color:var(--nv-muted)] hidden sm:inline">· {link.desc}</span>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+function TrendingStrip({ names, religion, source }) {
+  if (!names.length) return null;
+
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <span className="text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">Trending:</span>
+      {names.map((item) => (
+        <Link
+          key={item.slug}
+          href={`/names/${religion}/${item.slug}`}
+          className="rounded-full bg-white/60 px-3 py-1.5 text-sm font-medium text-[color:var(--nv-ink)] border border-[color:var(--nv-border)] transition hover:border-[color:var(--nv-accent-2)] hover:text-[color:var(--nv-accent-2)]"
+        >
+          {item.name}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 export default function CulturalNameAnalysisCard({ data, faqData = [], pageUrl, trendingNames = [], trendingNamesSource = 'suggested' }) {
   const safeFaqData = Array.isArray(faqData)
     ? faqData.filter((item) => item && typeof item === 'object' && item.q && item.a)
     : [];
   const religion = cleanText(data.religion || 'islamic').toLowerCase();
   const religionLabel = getReligionLabel(religion);
-  const firstLetter = cleanText(data.name).charAt(0).toUpperCase();
-  const originSlug = createSafeSlug(data.origin);
   const genderLabel = getGenderLabel(data.gender);
   const genderPath = getGenderPath(religion, data.gender);
-  const originLabel = cleanText(data.origin) || 'Origin';
   const normalizedTrending = trendingNames
     .map(name => normalizeTrendingName(name, religion))
     .filter(Boolean)
-    .slice(0, 8);
-
-  const collectionLinks = [
-    {
-      label: `All ${religionLabel} names`,
-      href: `/names/religion/${religion}/1`,
-      description: `Browse ${religionLabel.toLowerCase()} baby names with meanings, origins and lucky numbers.`,
-    },
-    {
-      label: `${originLabel} origin names`,
-      href: originSlug ? `/names/${religion}/origin/${originSlug}/1` : null,
-      description: `Explore more names from ${originLabel.toLowerCase()} origin.`,
-    },
-    {
-      label: `${religionLabel} names starting with ${firstLetter}`,
-      href: firstLetter ? `/names/${religion}/letter/${firstLetter}/1` : null,
-      description: `Find ${religionLabel.toLowerCase()} names that begin with ${firstLetter}.`,
-    },
-    {
-      label: `${religionLabel} ${genderLabel.toLowerCase()} names`,
-      href: genderPath,
-      description: `Browse ${religionLabel.toLowerCase()} ${genderLabel.toLowerCase()} names.`,
-    },
-  ].filter(link => link.href);
-
-  const topicClusterId = `${religion}-names` || 'baby-names';
+    .slice(0, 6);
 
   return (
     <SitePage
@@ -95,144 +111,78 @@ export default function CulturalNameAnalysisCard({ data, faqData = [], pageUrl, 
         { label: data.name },
       ]}
     >
-      {/* Topic Cluster Navigation */}
-      <div className="nv-card-solid mb-6">
-        <TopicClusterNav
-          clusterId={topicClusterId}
-          currentName={data.name}
-          currentReligion={religion}
-        />
-      </div>
-
-      <NameHero data={data} pageUrl={pageUrl} />
-
       <div className="nv-stack">
-        <LinguisticOriginPanel data={data} nativeBanner={
-          <NativeBanner className="my-6" minHeight="90px" instanceId="name-detail-mid" />
-        } />
+        {/* Topic Cluster — subtle breadcrumb */}
+        <nav className="flex items-center gap-2 text-sm text-[color:var(--nv-muted)]">
+          <Link href={`/names/${religion}`} className="font-medium hover:text-[color:var(--nv-ink)] transition">{religionLabel} Names</Link>
+          <span>/</span>
+          <span className="text-[color:var(--nv-ink)] font-medium">{data.name}</span>
+        </nav>
 
-        <RelatedNames data={data} />
-      </div>
+        {/* Hero */}
+        <NameHero data={data} pageUrl={pageUrl} />
 
-      {/* Knowledge Graph Section */}
-      <div className="nv-stack">
-        <KnowledgeGraph data={data} religion={religion} />
-      </div>
+        {/* Quick Navigation */}
+        <QuickNav religion={religion} genderPath={genderPath} genderLabel={genderLabel} data={data} />
 
-
-      <div className="nv-stack">
-        <section className="nv-card-solid">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-700">
-              <LayoutDashboard className="h-5 w-5" />
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold text-slate-900">Explore Related {religionLabel} Name Collections</h2>
-              <p className="text-sm text-slate-500">Continue from this name to matching religion, origin, letter and gender pages.</p>
-            </div>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {collectionLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="rounded-2xl border border-slate-200 bg-indigo-50 p-4 transition hover:border-indigo-300 hover:bg-indigo-100"
-              >
-                <span className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                  {link.label} <ArrowRight className="h-4 w-4" />
-                </span>
-                <span className="mt-2 block text-sm leading-6 text-slate-600">{link.description}</span>
-              </Link>
-            ))}
-            {/* Additional topic explorer links */}
-            <Link
-              href={`/names/${religion}/categories/modern/1`}
-              className="rounded-2xl border border-slate-200 bg-indigo-50 p-4 transition hover:border-indigo-300 hover:bg-indigo-100"
-            >
-              <span className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                Browse by Category <ArrowRight className="h-4 w-4" />
-              </span>
-              <span className="mt-2 block text-sm leading-6 text-slate-600">Explore themed {religionLabel.toLowerCase()} name lists.</span>
-            </Link>
-            <Link
-              href="/search"
-              className="rounded-2xl border border-slate-200 bg-indigo-50 p-4 transition hover:border-indigo-300 hover:bg-indigo-100"
-            >
-              <span className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                Search All Names <Search className="h-4 w-4" />
-              </span>
-              <span className="mt-2 block text-sm leading-6 text-slate-600">Search meanings, origins and lucky numbers.</span>
-            </Link>
-          </div>
-        </section>
-
+        {/* Trending strip */}
         {normalizedTrending.length > 0 && (
-          <section className="nv-card-solid">
-            <div className="mb-5 flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
-                <TrendingUp className="h-5 w-5" />
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold text-slate-900">{trendingNamesSource === 'trending' ? `Trending ${religionLabel} Names` : `Suggested ${religionLabel} Names`}</h2>
-                <p className="text-sm text-slate-500">Names to explore next on NameVerse.</p>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {normalizedTrending.map((item) => (
-                <Link
-                  key={`${item.name}-${item.slug}`}
-                  href={`/names/${religion}/${item.slug}`}
-                  className="rounded-full bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-800 ring-1 ring-emerald-100 transition hover:bg-emerald-100"
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </section>
+          <TrendingStrip names={normalizedTrending} religion={religion} source={trendingNamesSource} />
         )}
 
-        <section className="nv-card-solid">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 text-slate-700">
-              <Grid3X3 className="h-5 w-5" />
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold text-slate-900">Browse {religionLabel} Names</h2>
-              <p className="text-sm text-slate-500">Use NameVerse collections to compare meanings, origins and lucky numbers.</p>
+        {/* Main Content: Meaning + Knowledge Graph side by side on desktop */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div className="xl:col-span-2">
+            <div className="nv-stack">
+              <LinguisticOriginPanel data={data} nativeBanner={
+                <NativeBanner className="my-6" minHeight="90px" instanceId="name-detail-mid" />
+              } />
             </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <Link
-              href={`/names/${religion}/letter/a/1`}
-              className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all text-sm font-semibold text-slate-700 hover:text-indigo-700"
-            >
-              <Grid3X3 className="w-4 h-4" /> Browse by Letter
-            </Link>
-            <Link
-              href={`/names/${religion}/categories/modern/1`}
-              className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all text-sm font-semibold text-slate-700 hover:text-indigo-700"
-            >
-              <Grid3X3 className="w-4 h-4" /> Browse by Category
-            </Link>
-            <Link
-              href={originSlug ? `/names/${religion}/origin/${originSlug}/1` : `/names/${religion}/origin/arabic/1`}
-              className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all text-sm font-semibold text-slate-700 hover:text-indigo-700"
-            >
-              <Grid3X3 className="w-4 h-4" /> Browse by Origin
-            </Link>
-            <Link
-              href="/search"
-              className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all text-sm font-semibold text-slate-700 hover:text-indigo-700"
-            >
-              <Search className="w-4 h-4" /> Search All Names
-            </Link>
+          <div className="xl:col-span-1">
+            <div className="xl:sticky xl:top-24 space-y-4">
+              <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
+                <KnowledgeGraph data={data} religion={religion} />
+              </section>
+            </div>
           </div>
-        </section>
+        </div>
 
+        {/* Related Names + Trending Names combined */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
+            <RelatedNames data={data} />
+          </section>
+          {normalizedTrending.length > 0 && (
+            <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
+              <div className="mb-5 flex items-start gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 shadow-sm">
+                  <TrendingUp className="h-5 w-5" />
+                </div>
+                <div>
+                  <h2 className="nv-display text-xl font-semibold text-[color:var(--nv-ink)]">Trending Now</h2>
+                  <p className="mt-1 text-sm text-[color:var(--nv-muted)]">Names gaining popularity</p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                {normalizedTrending.slice(0, 5).map((item) => (
+                  <Link
+                    key={item.slug}
+                    href={`/names/${religion}/${item.slug}`}
+                    className="flex items-center justify-between rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--nv-accent-2)] hover:shadow-sm"
+                  >
+                    <span className="text-sm font-bold text-[color:var(--nv-ink)]">{item.name}</span>
+                    <ArrowRight className="h-4 w-4 text-[color:var(--nv-muted)] opacity-0 transition group-hover:opacity-100" />
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+
+        {/* FAQ */}
         <FAQ faqData={safeFaqData} name={data.name} />
       </div>
-
-      <BlogSection religion={religion} title={`${religionLabel} Name Guides`} />
     </SitePage>
   );
 }

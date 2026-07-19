@@ -1,19 +1,22 @@
+export const revalidate = 31536000; // 365 days
+
 import { validateMetaTitle, validateMetaDescription } from '@/lib/seo/meta-helpers';
 import { getSiteUrl } from '@/lib/seo/site';
-import { EEAT_CONFIG } from '@/lib/seo/enterprise-seo-config';
+import { EEAT_CONFIG, SOURCES } from '@/lib/seo/enterprise-seo-config';
+import { BookOpen, Globe, Shield, Users, Award, CheckCircle2, ExternalLink, Quote } from 'lucide-react';
 
 const siteUrl = getSiteUrl();
 
 export const metadata = {
-  title: validateMetaTitle('About NameVerse — Editorial Team & Mission | NameVerse'),
+  title: validateMetaTitle('About NameVerse — Editorial Team, Mission & Verification Process | NameVerse'),
   description: validateMetaDescription(
-    'NameVerse is a trusted baby name knowledge base. Our editorial team includes linguists, scholars, and researchers specializing in Islamic, Hindu, and Christian naming traditions.'
+    'NameVerse is a trusted baby name knowledge base reviewed by linguists, scholars, and researchers. Meet our editorial team, explore our verification process, and discover why parents rely on our 65K+ name records.'
   ),
   alternates: { canonical: `${siteUrl}/about` },
   openGraph: {
-    title: validateMetaTitle('About NameVerse — Editorial Team & Mission | NameVerse'),
+    title: validateMetaTitle('About NameVerse — Editorial Team, Mission & Verification Process | NameVerse'),
     description: validateMetaDescription(
-      'NameVerse is a trusted baby name knowledge base. Our editorial team includes linguists, scholars, and researchers specializing in Islamic, Hindu, and Christian naming traditions.'
+      'NameVerse is a trusted baby name knowledge base reviewed by linguists, scholars, and researchers. Meet our editorial team and verification process.'
     ),
     url: `${siteUrl}/about`,
     type: 'website',
@@ -21,169 +24,262 @@ export const metadata = {
   },
 };
 
+function SectionHeading({ icon: Icon, eyebrow, title, description }) {
+  return (
+    <div className="mb-6 flex items-start gap-3">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 shadow-sm">
+        <Icon className="h-5 w-5" />
+      </div>
+      <div>
+        {eyebrow && <p className="text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">{eyebrow}</p>}
+        <h2 className="nv-display text-xl font-semibold text-[color:var(--nv-ink)]">{title}</h2>
+        {description && <p className="mt-1 text-sm text-[color:var(--nv-muted)]">{description}</p>}
+      </div>
+    </div>
+  );
+}
+
+function TeamCard({ member }) {
+  return (
+    <div className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 p-6 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)] transition hover:-translate-y-1 hover:shadow-md">
+      <div className="flex items-start gap-4 mb-4">
+        <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-[color:var(--nv-ink)] text-white text-lg font-bold">
+          {member.name.split(' ').map(n => n[0]).join('')}
+        </div>
+        <div>
+          <h3 className="text-base font-bold text-[color:var(--nv-ink)]">{member.name}</h3>
+          <p className="text-sm font-semibold text-[color:var(--nv-accent-2)]">{member.title}</p>
+        </div>
+      </div>
+      <p className="text-sm leading-relaxed text-[color:var(--nv-muted)] mb-4">{member.bio}</p>
+      <div className="space-y-2 text-sm">
+        <div className="flex items-center gap-2 text-[color:var(--nv-muted)]">
+          <Award className="h-4 w-4 text-[color:var(--nv-accent-2)]" />
+          <span>{member.credentials}</span>
+        </div>
+        <div className="flex items-center gap-2 text-[color:var(--nv-muted)]">
+          <Globe className="h-4 w-4 text-[color:var(--nv-accent-2)]" />
+          <span>{member.languages.join(', ')}</span>
+        </div>
+        <div className="flex items-center gap-2 text-[color:var(--nv-muted)]">
+          <BookOpen className="h-4 w-4 text-[color:var(--nv-accent-2)]" />
+          <span>{member.expertise.join(', ')}</span>
+        </div>
+      </div>
+      {member.linkedin && (
+        <a
+          href={member.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 mt-4 text-sm font-semibold text-[color:var(--nv-accent-2)] transition hover:text-[color:var(--nv-accent)]"
+        >
+          View LinkedIn Profile <ExternalLink className="h-3.5 w-3.5" />
+        </a>
+      )}
+    </div>
+  );
+}
+
+function ReviewerCard({ reviewer }) {
+  return (
+    <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-5 text-center transition hover:-translate-y-0.5 hover:shadow-md">
+      <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-amber-100 text-amber-700 font-bold">
+        {reviewer.name.split(' ').map(n => n[0]).join('')}
+      </div>
+      <h3 className="mt-3 text-sm font-bold text-[color:var(--nv-ink)]">{reviewer.name}</h3>
+      <p className="text-xs font-semibold text-[color:var(--nv-accent-2)]">{reviewer.title}</p>
+      <p className="mt-2 text-xs text-[color:var(--nv-muted)]">{reviewer.credentials}</p>
+    </div>
+  );
+}
+
+function ProcessStep({ number, title, description }) {
+  return (
+    <div className="flex gap-4">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color:var(--nv-ink)] text-white text-sm font-bold">
+        {number}
+      </div>
+      <div>
+        <h3 className="text-sm font-bold text-[color:var(--nv-ink)]">{title}</h3>
+        <p className="mt-1 text-sm text-[color:var(--nv-muted)] leading-relaxed">{description}</p>
+      </div>
+    </div>
+  );
+}
+
+function SourceItem({ source }) {
+  return (
+    <li className="flex items-start gap-2 text-sm text-[color:var(--nv-muted)]">
+      <CheckCircle2 className="h-4 w-4 text-[color:var(--nv-accent-2)] mt-0.5 shrink-0" />
+      <span>
+        <strong className="text-[color:var(--nv-ink)]">{source.name}</strong>
+        {' '}({source.type})
+        {source.url && (
+          <a href={source.url} target="_blank" rel="noopener noreferrer" className="text-[color:var(--nv-accent-2)] hover:underline ml-1">
+            <ExternalLink className="h-3 w-3 inline" />
+          </a>
+        )}
+      </span>
+    </li>
+  );
+}
+
 export default function AboutPage() {
   const team = EEAT_CONFIG.editorialTeam;
   const reviewers = EEAT_CONFIG.reviewers;
+  const sources = SOURCES;
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50">
-      <div className="max-w-4xl mx-auto px-4 py-12">
+    <main className="min-h-screen bg-[color:var(--nv-canvas)] nv-body">
+      <div className="nv-container nv-stack">
         {/* Hero Section */}
-        <section className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4 font-display">
-            About NameVerse
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            NameVerse is a trusted cultural name knowledge base. We help parents discover 
-            meaningful names with verified meanings, origins, and cultural context across 
-            Islamic, Hindu, Christian, and global traditions.
-          </p>
+        <section className="relative overflow-hidden rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
+          <div className="pointer-events-none absolute inset-0 opacity-60 [background:radial-gradient(circle_at_10%_20%,rgba(14,165,164,0.20),transparent_42%),radial-gradient(circle_at_80%_30%,rgba(79,70,229,0.18),transparent_44%),radial-gradient(circle_at_30%_90%,rgba(245,158,11,0.20),transparent_46%)]" />
+          <div className="relative p-6 sm:p-8 lg:p-12">
+            <div className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white">
+              <BookOpen className="h-4 w-4" /> About NameVerse
+            </div>
+            <h1 className="nv-display mt-5 text-3xl font-bold leading-[0.98] tracking-tight text-[color:var(--nv-ink)] sm:text-4xl md:text-5xl lg:text-6xl">
+              Trusted name research for parents worldwide.
+            </h1>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-[color:var(--nv-muted)] sm:text-lg">
+              NameVerse is a cultural name knowledge base combining 65,000+ name records with verified meanings, origins, and cultural context across Islamic, Hindu, Christian, and global traditions.
+            </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4">
+                <div className="text-2xl font-bold text-[color:var(--nv-ink)]">65K+</div>
+                <div className="text-xs font-semibold text-[color:var(--nv-muted)]">Name records</div>
+              </div>
+              <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4">
+                <div className="text-2xl font-bold text-[color:var(--nv-ink)]">4</div>
+                <div className="text-xs font-semibold text-[color:var(--nv-muted)]">Traditions covered</div>
+              </div>
+              <div className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-4">
+                <div className="text-2xl font-bold text-[color:var(--nv-ink)]">{sources.length}+</div>
+                <div className="text-xs font-semibold text-[color:var(--nv-muted)]">Authoritative sources</div>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Mission Section */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Our Mission</h2>
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-            <p className="text-gray-700 leading-relaxed mb-4">
-              Our mission is to build the most comprehensive, accurate, and culturally 
-              respectful baby name resource on the internet. We believe every name carries 
-              a story — a linguistic history, a cultural tradition, and a meaning that 
-              connects generations.
-            </p>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              We are committed to:
-            </p>
-            <ul className="space-y-3 text-gray-700">
-              <li className="flex items-start gap-3">
-                <span className="text-emerald-500 mt-1">✓</span>
-                <span><strong>Accuracy:</strong> Every name meaning is verified against authoritative linguistic sources.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-emerald-500 mt-1">✓</span>
-                <span><strong>Cultural Respect:</strong> We present names within their authentic cultural and religious contexts.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-emerald-500 mt-1">✓</span>
-                <span><strong>Transparency:</strong> Our editorial process, sources, and methodology are publicly documented.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-emerald-500 mt-1">✓</span>
-                <span><strong>Inclusivity:</strong> We cover Islamic, Hindu, Christian, and global naming traditions with equal depth.</span>
-              </li>
-            </ul>
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
+          <SectionHeading
+            icon={Shield}
+            eyebrow="Our Mission"
+            title="Building the most trustworthy name resource on the internet."
+            description="Every name carries a story — a linguistic history, a cultural tradition, and a meaning that connects generations."
+          />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { title: 'Accuracy', desc: 'Every meaning verified against authoritative linguistic sources.' },
+              { title: 'Cultural Respect', desc: 'Names presented within authentic cultural and religious contexts.' },
+              { title: 'Transparency', desc: 'Editorial process, sources, and methodology publicly documented.' },
+              { title: 'Inclusivity', desc: 'Equal depth across Islamic, Hindu, Christian, and global traditions.' },
+            ].map((item) => (
+              <div key={item.title} className="rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-5 transition hover:-translate-y-0.5 hover:shadow-md">
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle2 className="h-5 w-5 text-[color:var(--nv-accent-2)]" />
+                  <h3 className="text-sm font-bold text-[color:var(--nv-ink)]">{item.title}</h3>
+                </div>
+                <p className="text-sm text-[color:var(--nv-muted)] leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
           </div>
         </section>
 
         {/* Editorial Team Section */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Editorial Team</h2>
-          <div className="grid gap-6 md:grid-cols-2">
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
+          <SectionHeading
+            icon={Users}
+            eyebrow="Editorial Team"
+            title="Linguists, scholars, and researchers."
+            description="Our team specializes in Arabic, Sanskrit, Hebrew, Greek, and Latin name traditions."
+          />
+          <div className="grid gap-4 sm:grid-cols-2">
             {team.map((member) => (
-              <div key={member.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xl font-bold shrink-0">
-                    {member.name.split(' ').map(n => n[0]).join('')}
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900">{member.name}</h3>
-                    <p className="text-sm text-indigo-600 font-medium">{member.title}</p>
-                  </div>
-                </div>
-                <p className="text-gray-600 text-sm mb-3">{member.bio}</p>
-                <div className="space-y-2 text-sm text-gray-500">
-                  <p><strong>Experience:</strong> {member.experience}</p>
-                  <p><strong>Languages:</strong> {member.languages.join(', ')}</p>
-                  <p><strong>Expertise:</strong> {member.expertise.join(', ')}</p>
-                  <p><strong>Credentials:</strong> {member.credentials}</p>
-                </div>
-                {member.linkedin && (
-                  <a 
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 mt-4 text-sm text-indigo-600 hover:text-indigo-800"
-                  >
-                    View LinkedIn Profile →
-                  </a>
-                )}
-              </div>
+              <TeamCard key={member.id} member={member} />
             ))}
           </div>
         </section>
 
         {/* Reviewers Section */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Fact-Checking & Review Team</h2>
-          <div className="grid gap-4 md:grid-cols-3">
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
+          <SectionHeading
+            icon={Award}
+            eyebrow="Fact-Checking & Review"
+            title="Independent verification by subject-matter experts."
+            description="Every name entry is cross-referenced by specialists in the relevant linguistic tradition."
+          />
+          <div className="grid gap-3 sm:grid-cols-3">
             {reviewers.map((reviewer) => (
-              <div key={reviewer.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold mb-3">
-                  {reviewer.name.split(' ').map(n => n[0]).join('')}
-                </div>
-                <h3 className="font-bold text-gray-900">{reviewer.name}</h3>
-                <p className="text-sm text-emerald-600 font-medium">{reviewer.title}</p>
-                <p className="text-sm text-gray-500 mt-2">{reviewer.credentials}</p>
-              </div>
+              <ReviewerCard key={reviewer.id} reviewer={reviewer} />
             ))}
           </div>
         </section>
 
         {/* Editorial Process Section */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Our Editorial Process</h2>
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-            <ol className="space-y-6">
-              <li className="flex gap-4">
-                <span className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center shrink-0 font-bold">1</span>
-                <div>
-                  <h3 className="font-bold text-gray-900">Research</h3>
-                  <p className="text-gray-600 text-sm">Each name is researched using authoritative linguistic sources including classical dictionaries, religious texts, and academic references.</p>
-                </div>
-              </li>
-              <li className="flex gap-4">
-                <span className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center shrink-0 font-bold">2</span>
-                <div>
-                  <h3 className="font-bold text-gray-900">Verification</h3>
-                  <p className="text-gray-600 text-sm">Meanings, origins, and cultural context are cross-referenced against multiple sources to ensure accuracy.</p>
-                </div>
-              </li>
-              <li className="flex gap-4">
-                <span className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center shrink-0 font-bold">3</span>
-                <div>
-                  <h3 className="font-bold text-gray-900">Review</h3>
-                  <p className="text-gray-600 text-sm">Content is reviewed by subject-matter experts specializing in the relevant linguistic and cultural tradition.</p>
-                </div>
-              </li>
-              <li className="flex gap-4">
-                <span className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center shrink-0 font-bold">4</span>
-                <div>
-                  <h3 className="font-bold text-gray-900">Publication</h3>
-                  <p className="text-gray-600 text-sm">Approved content is published with clear attribution, publication dates, and source citations.</p>
-                </div>
-              </li>
-              <li className="flex gap-4">
-                <span className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center shrink-0 font-bold">5</span>
-                <div>
-                  <h3 className="font-bold text-gray-900">Ongoing Review</h3>
-                  <p className="text-gray-600 text-sm">All content is periodically reviewed and updated to maintain accuracy and relevance.</p>
-                </div>
-              </li>
-            </ol>
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
+          <SectionHeading
+            icon={BookOpen}
+            eyebrow="Editorial Process"
+            title="How we verify every name."
+            description="A five-step process ensures accuracy, cultural respect, and transparent sourcing."
+          />
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+            <ProcessStep number={1} title="Research" description="Each name is researched using authoritative linguistic sources including classical dictionaries, religious texts, and academic references." />
+            <ProcessStep number={2} title="Verification" description="Meanings, origins, and cultural context are cross-referenced against multiple sources to ensure accuracy." />
+            <ProcessStep number={3} title="Review" description="Content is reviewed by subject-matter experts specializing in the relevant linguistic and cultural tradition." />
+            <ProcessStep number={4} title="Publication" description="Approved content is published with clear attribution, publication dates, and source citations." />
+            <ProcessStep number={5} title="Ongoing Review" description="All content is periodically reviewed and updated to maintain accuracy and relevance." />
           </div>
         </section>
 
-        {/* Contact Section */}
-        <section className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Get in Touch</h2>
-          <p className="text-gray-600 mb-6">
-            Have questions, suggestions, or corrections? We'd love to hear from you.
+        {/* Sources Section */}
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
+          <SectionHeading
+            icon={Globe}
+            eyebrow="Sources"
+            title="Authoritative references we rely on."
+            description="NameVerse draws from dictionaries, lexicons, encyclopedias, and academic databases."
+          />
+          <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {sources.map((source) => (
+              <SourceItem key={source.name} source={source} />
+            ))}
+          </ul>
+          <p className="mt-4 text-xs text-[color:var(--nv-muted)]">
+            Last reviewed: {EEAT_CONFIG.lastReviewed} · Published: {EEAT_CONFIG.publishedDate}
           </p>
-          <a 
-            href="/contact"
-            className="inline-flex items-center gap-2 bg-indigo-600 text-white px-8 py-3 rounded-xl hover:bg-indigo-700 transition-colors font-semibold"
-          >
-            Contact Us
-          </a>
+        </section>
+
+        {/* Quote / Authority Section */}
+        <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
+          <div className="p-6 sm:p-8 lg:p-10">
+            <Quote className="h-8 w-8 text-[color:var(--nv-accent-2)]" />
+            <p className="mt-5 text-xl font-semibold leading-relaxed text-[color:var(--nv-ink)]">
+              A great name should be easy to search, simple to understand and rich enough to connect a child to family, faith and culture.
+            </p>
+            <p className="mt-4 text-sm leading-relaxed text-[color:var(--nv-muted)]">
+              NameVerse is built for E-E-A-T: Experience, Expertise, Authoritativeness, and Trustworthiness. Every page is designed to answer parent questions before they leave the site — what names mean, where they come from, which are popular, and how to choose with confidence.
+            </p>
+          </div>
+        </section>
+
+        {/* Contact CTA */}
+        <section className="text-center rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
+          <div className="p-6 sm:p-8 lg:p-10">
+            <h2 className="nv-display text-2xl font-semibold text-[color:var(--nv-ink)] sm:text-3xl">Get in Touch</h2>
+            <p className="mt-3 max-w-xl mx-auto text-sm text-[color:var(--nv-muted)] sm:text-base">
+              Have questions, suggestions, or corrections? We welcome feedback from linguists, parents, and cultural experts.
+            </p>
+            <a
+              href="/contact"
+              className="inline-flex items-center gap-2 mt-6 rounded-2xl bg-[color:var(--nv-ink)] px-6 py-3 text-sm font-bold text-white transition hover:bg-slate-800"
+            >
+              Contact Us
+            </a>
+          </div>
         </section>
       </div>
     </main>

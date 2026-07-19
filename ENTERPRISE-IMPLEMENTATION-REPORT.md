@@ -116,7 +116,7 @@ Complete `/about` page with:
 
 | Property | Before | After |
 |---|---|---|
-| `@id` | Missing | `https://nameverse.vercel.app/#organization` |
+| `@id` | Missing | `https://nameverse.site/#organization` |
 | `sameAs` | Twitter only | Twitter, Facebook, Instagram, LinkedIn |
 | `foundingDate` | Missing | 2025 |
 | `numberOfEmployees` | Missing | 5-20 |

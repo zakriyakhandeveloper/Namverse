@@ -4,6 +4,7 @@ import { Sparkles, Star, Moon, ChevronRight, Zap, Diamond, Gift, Globe } from 'l
 import { validateMetaTitle, validateMetaDescription } from '@/lib/seo/meta-helpers';
 import { getSiteUrl } from '@/lib/seo/site';
 import SitePage from '@/components/Layout/SitePage';
+import { gradientFor } from '@/lib/ui/colorGradient';
 
 // ISR: 30-day cache — static content
 export const revalidate = 31536000; // 365 days
@@ -210,7 +211,7 @@ export default async function UniqueNamesPage() {
                 const Icon = category.icon;
                 return (
                   <div key={index} className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
-                    <div className={`bg-gradient-to-r from-${category.color}-500 to-${category.color}-600 p-6 text-white`}>
+                    <div className={`bg-gradient-to-r ${gradientFor(category.color)} p-6 text-white`}>
                       <div className="flex items-center justify-between mb-4">
                         <Icon className="w-8 h-8" />
                         <span className="text-sm font-medium bg-white/20 px-3 py-1 rounded-full">

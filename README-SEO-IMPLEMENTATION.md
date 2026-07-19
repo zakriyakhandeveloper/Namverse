@@ -45,7 +45,7 @@ vercel --prod
 ### 5. Post-Deployment
 ```bash
 # Submit sitemap
-https://nameverse.vercel.app/sitemap.xml
+https://nameverse.site/sitemap.xml
 
 # Monitor GSC for 72 hours
 # Verify error counts drop
@@ -175,19 +175,19 @@ npm run lint            # Code linting
 ### Manual Tests
 ```bash
 # Test redirects
-curl -I "https://nameverse.vercel.app/Names/Islamic/Abdullah/"
+curl -I "https://nameverse.site/Names/Islamic/Abdullah/"
 # Expected: 301 to /names/islamic/abdullah
 
 # Test invalid URLs
-curl -I "https://nameverse.vercel.app/names/islamic/j"
+curl -I "https://nameverse.site/names/islamic/j"
 # Expected: 410 Gone
 
 # Test canonical tags
-curl "https://nameverse.vercel.app/names/islamic/ismail" | grep canonical
-# Expected: <link rel="canonical" href="https://nameverse.vercel.app/names/islamic/ismail">
+curl "https://nameverse.site/names/islamic/ismail" | grep canonical
+# Expected: <link rel="canonical" href="https://nameverse.site/names/islamic/ismail">
 
 # Test hreflang tags
-curl "https://nameverse.vercel.app/names/islamic/ismail" | grep hreflang
+curl "https://nameverse.site/names/islamic/ismail" | grep hreflang
 # Expected: <link rel="alternate" hrefLang="en" ...>
 ```
 

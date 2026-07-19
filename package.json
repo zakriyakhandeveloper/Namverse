@@ -15,32 +15,17 @@
     "clear-all-cache": "rimraf .next node_modules/.cache",
     "dev:clean": "npm run clear-all-cache && next dev",
     "rebuild": "npm run clear-all-cache && next build",
-    "reset": "npm run clear-all-cache && npm run dev"
+    "reset": "npm run clear-all-cache && npm run dev",
+    "revalidate:name": "node scripts/revalidate-name.js",
+    "revalidate:tag": "node scripts/revalidate-name.js --tag"
   },
   "dependencies": {
-    "@heroicons/react": "^2.2.0",
-    "@radix-ui/react-dropdown-menu": "^2.1.15",
-    "@radix-ui/react-scroll-area": "^1.2.10",
-    "@radix-ui/react-slot": "^1.2.3",
-    "@shadcn/ui": "^0.0.4",
-    "axios": "^1.11.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "framer-motion": "^12.40.0",
-    "fuse.js": "^7.1.0",
     "lucide-react": "^1.8.0",
     "next": "^16.0.10",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "react-hot-toast": "^2.4.1",
-    "shadcn": "^2.10.0",
     "sharp": "^0.34.4",
-    "sitemap": "^9.0.0",
-    "sonner": "^1.7.1",
-    "swr": "^2.3.4",
-    "tailwind-merge": "^3.3.1",
-    "web-vitals": "^4.2.4",
-    "zustand": "^5.0.9"
+    "sitemap": "^9.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

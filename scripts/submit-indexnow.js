@@ -3,7 +3,7 @@ import path from 'node:path';
 import { submitIndexNowChanges } from '../src/lib/indexnow';
 
 const apiKey = process.env.INDEXNOW_API_KEY;
-const host = process.env.NEXT_PUBLIC_SITE_URL || 'https://nameverse.vercel.app';
+const host = process.env.NEXT_PUBLIC_SITE_URL || 'https://nameverse.site';
 const manifestPath = path.resolve('public/seo-sitemap-manifest.json');
 const statePath = process.env.INDEXNOW_STATE_PATH || path.resolve('public/.indexnow-state.json');
 

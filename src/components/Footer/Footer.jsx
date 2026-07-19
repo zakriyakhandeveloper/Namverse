@@ -1,6 +1,5 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import { Globe, Link2, Share2, User, BookOpen, Sparkles, Heart, TrendingUp, Search, Grid3X3, Network, LayoutDashboard } from 'lucide-react';
+import { Globe, Link2, Share2, User, BookOpen, Sparkles, Heart, TrendingUp, Search, List } from 'lucide-react';
 
 const footerLinks = {
   'By Religion': [
@@ -70,27 +69,34 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-slate-200 bg-white">
+    <footer className="border-t border-nv-border bg-nv-surface">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <div>
             <Link href="/" className="flex items-center gap-3">
-              <div className="grid h-11 w-11 place-items-center rounded-2xl bg-slate-950 text-white">
-                <Image src="/logo.png" alt="NameVerse logo" width={30} height={30} className="object-contain" />
+              <div className="grid h-11 w-11 place-items-center rounded-lg bg-nv-primary text-white shadow-sm">
+                <span className="text-xl font-black leading-none">N</span>
               </div>
               <div>
-                <div className="text-lg font-black tracking-tight text-slate-950">NameVerse</div>
-                <div className="text-xs font-semibold text-slate-500">Meanings, origins & guides</div>
+                <div className="text-lg font-black tracking-tight text-nv-text">NameVerse</div>
+                <div className="text-sm font-medium text-nv-text-muted">Meanings, origins & guides</div>
               </div>
             </Link>
-            <p className="mt-5 max-w-sm text-sm leading-relaxed text-slate-600">
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-nv-text-secondary">
               NameVerse helps parents and researchers discover baby names with meanings, cultural origins, linguistic context and trusted naming guidance.
             </p>
             <div className="mt-6 flex gap-2">
               {socialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
-                  <a key={social.label} href={social.href} target="_blank" rel="noreferrer" className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700" aria-label={social.label}>
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="grid h-10 w-10 place-items-center rounded-lg border border-nv-border text-nv-text-secondary transition hover:border-nv-accent hover:bg-nv-accent-subtle hover:text-nv-accent"
+                    aria-label={social.label}
+                  >
                     <Icon className="h-4 w-4" />
                   </a>
                 );
@@ -100,11 +106,11 @@ export default function Footer() {
 
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h3 className="mb-4 text-sm font-black uppercase tracking-[0.16em] text-slate-950">{title}</h3>
+              <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-nv-text">{title}</h3>
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="text-sm font-semibold text-slate-600 transition hover:text-blue-700">
+                    <Link href={link.href} className="text-sm font-medium text-nv-text-secondary transition hover:text-nv-accent">
                       {link.label}
                     </Link>
                   </li>
@@ -114,29 +120,29 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="mt-10 rounded-[2rem] border border-slate-200 bg-slate-50 p-5">
+        <div className="mt-10 rounded-xl border border-nv-border bg-nv-surface-subtle p-5">
           <div className="grid gap-4 md:grid-cols-3">
             <div>
-              <div className="text-sm font-bold text-slate-950">Verified name research</div>
-              <p className="mt-1 text-xs leading-relaxed text-slate-600">Curated meanings, origins and cultural context for major naming traditions.</p>
+              <div className="text-sm font-bold text-nv-text">Verified name research</div>
+              <p className="mt-1 text-sm leading-relaxed text-nv-text-secondary">Curated meanings, origins and cultural context for major naming traditions.</p>
             </div>
             <div>
-              <div className="text-sm font-bold text-slate-950">Fast discovery</div>
-              <p className="mt-1 text-xs leading-relaxed text-slate-600">Search, browse and compare names with clean, mobile-first navigation.</p>
+              <div className="text-sm font-bold text-nv-text">Fast discovery</div>
+              <p className="mt-1 text-sm leading-relaxed text-nv-text-secondary">Search, browse and compare names with clean, mobile-first navigation.</p>
             </div>
             <div>
-              <div className="text-sm font-bold text-slate-950">Parent-first guidance</div>
-              <p className="mt-1 text-xs leading-relaxed text-slate-600">Practical articles and tools designed for confident family decisions.</p>
+              <div className="text-sm font-bold text-nv-text">Parent-first guidance</div>
+              <p className="mt-1 text-sm leading-relaxed text-nv-text-secondary">Practical articles and tools designed for confident family decisions.</p>
             </div>
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 border-t border-slate-200 pt-6 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+        <div className="mt-8 flex flex-col gap-3 border-t border-nv-border pt-6 text-sm text-nv-text-muted md:flex-row md:items-center md:justify-between">
           <p>© {currentYear} NameVerse. All rights reserved.</p>
           <div className="flex flex-wrap gap-4">
-            <Link href="/privacy" className="font-semibold hover:text-blue-700">Privacy</Link>
-            <Link href="/terms" className="font-semibold hover:text-blue-700">Terms</Link>
-            <a href="/sitemap.xml" className="font-semibold hover:text-blue-700">Sitemap</a>
+            <Link href="/privacy" className="font-semibold hover:text-nv-accent">Privacy</Link>
+            <Link href="/terms" className="font-semibold hover:text-nv-accent">Terms</Link>
+            <a href="/sitemap.xml" className="font-semibold hover:text-nv-accent">Sitemap</a>
           </div>
         </div>
       </div>

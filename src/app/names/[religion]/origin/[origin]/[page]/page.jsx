@@ -13,11 +13,22 @@ const STATIC_ORIGINS = ['arabic', 'persian', 'turkish', 'indian', 'english', 'ot
 export const revalidate = 31536000; // 365 days
 export const dynamicParams = true;
 
-// Pre-generate origin pages at build time
+// Pre-generate first pages of each origin/religion combo at build time; deeper
+// pages generate on-demand via ISR. Capping to the first 2 pages keeps the build
+// fast (prebuilding all 6x3x20 triggered slow per-page backend fetches).
 export async function generateStaticParams() {
-  // Disabled pre-generation for origin listing pages to stay within static page budget.
-  // Origin pages will be generated on-demand via ISR.
-  return [];
+  const VALID_RELIGIONS = ['islamic', 'christian', 'hindu'];
+  const STATIC_ORIGINS = ['arabic', 'persian', 'turkish', 'indian', 'english', 'other'];
+  const MAX_PAGES = 2;
+  const params = [];
+  for (const religion of VALID_RELIGIONS) {
+    for (const origin of STATIC_ORIGINS) {
+      for (let page = 1; page <= MAX_PAGES; page++) {
+        params.push({ religion, origin, page: String(page) });
+      }
+    }
+  }
+  return params;
 }
 
 function resolveOrigin(origin, availableOrigins) {

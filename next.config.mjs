@@ -28,7 +28,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'nameverse.vercel.app',
+        hostname: 'nameverse.site',
       },
     ],
     formats: ['image/avif', 'image/webp'],
@@ -194,7 +194,7 @@ const nextConfig = {
       '@radix-ui/react-dropdown-menu',
       '@radix-ui/react-scroll-area',
       '@radix-ui/react-slot',
-      '@heroicons/react',
+      'lucide-react',
     ],
   },
 

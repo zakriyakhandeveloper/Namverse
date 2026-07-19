@@ -25,7 +25,7 @@ export const metadata = {
     siteName: 'NameVerse',
     images: [
       {
-        url: getSiteUrl() + '/logo.png',
+        url: getSiteUrl() + '/logo.svg',
         width: 1200,
         height: 630,
         alt: 'Islamic Girl Names with Meanings - NameVerse',
@@ -36,7 +36,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: '216+ Islamic Girl Names with Meanings | Muslim Baby Girl Names',
     description: 'Discover 216+ beautiful Islamic girl names with meanings, origins & lucky numbers.',
-    images: [getSiteUrl() + '/logo.png'],
+    images: [getSiteUrl() + '/logo.svg'],
   },
   robots: { 
     index: true, 

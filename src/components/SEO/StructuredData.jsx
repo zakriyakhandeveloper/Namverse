@@ -27,7 +27,7 @@ export default function StructuredData({
       "url": siteUrl,
       "logo": {
         "@type": "ImageObject",
-        "url": `${siteUrl}/logo.png`,
+        "url": `${siteUrl}/logo.svg`,
         "width": 192,
         "height": 192
       },

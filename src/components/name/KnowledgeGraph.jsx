@@ -1,4 +1,4 @@
- 'use client';
+'use client';
 
 import { useMemo } from 'react';
 import Link from 'next/link';
@@ -37,27 +37,27 @@ function getEntityIcon(type) {
 
 function getEntityColor(type) {
   const colors = {
-    [ENTITY_TYPES.RELIGION]: 'bg-amber-100 text-amber-800 border-amber-200',
-    [ENTITY_TYPES.ORIGIN]: 'bg-blue-100 text-blue-800 border-blue-200',
-    [ENTITY_TYPES.LANGUAGE]: 'bg-indigo-100 text-indigo-800 border-indigo-200',
-    [ENTITY_TYPES.COUNTRY]: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-    [ENTITY_TYPES.THEME]: 'bg-purple-100 text-purple-800 border-purple-200',
-    [ENTITY_TYPES.MEANING]: 'bg-rose-100 text-rose-800 border-rose-200',
-    [ENTITY_TYPES.CULTURE]: 'bg-teal-100 text-teal-800 border-teal-200',
-    [ENTITY_TYPES.ERA]: 'bg-orange-100 text-orange-800 border-orange-200',
-    [ENTITY_TYPES.VIRTUE]: 'bg-pink-100 text-pink-800 border-pink-200',
-    [ENTITY_TYPES.NATURE]: 'bg-green-100 text-green-800 border-green-200',
-    [ENTITY_TYPES.FLOWER]: 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-200',
-    [ENTITY_TYPES.ANIMAL]: 'bg-lime-100 text-lime-800 border-lime-200',
-    [ENTITY_TYPES.ROYAL]: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    [ENTITY_TYPES.BIBLICAL]: 'bg-sky-100 text-sky-800 border-sky-200',
-    [ENTITY_TYPES.QURANIC]: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-    [ENTITY_TYPES.VEDIC]: 'bg-orange-100 text-orange-800 border-orange-200',
-    [ENTITY_TYPES.ELEMENT]: 'bg-cyan-100 text-cyan-800 border-cyan-200',
-    [ENTITY_TYPES.COLOR]: 'bg-violet-100 text-violet-800 border-violet-200',
-    [ENTITY_TYPES.PROFESSION]: 'bg-slate-100 text-slate-800 border-slate-200',
+    [ENTITY_TYPES.RELIGION]: 'bg-amber-50 text-amber-800 border-amber-200',
+    [ENTITY_TYPES.ORIGIN]: 'bg-blue-50 text-blue-800 border-blue-200',
+    [ENTITY_TYPES.LANGUAGE]: 'bg-indigo-50 text-indigo-800 border-indigo-200',
+    [ENTITY_TYPES.COUNTRY]: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+    [ENTITY_TYPES.THEME]: 'bg-purple-50 text-purple-800 border-purple-200',
+    [ENTITY_TYPES.MEANING]: 'bg-rose-50 text-rose-800 border-rose-200',
+    [ENTITY_TYPES.CULTURE]: 'bg-teal-50 text-teal-800 border-teal-200',
+    [ENTITY_TYPES.ERA]: 'bg-orange-50 text-orange-800 border-orange-200',
+    [ENTITY_TYPES.VIRTUE]: 'bg-pink-50 text-pink-800 border-pink-200',
+    [ENTITY_TYPES.NATURE]: 'bg-green-50 text-green-800 border-green-200',
+    [ENTITY_TYPES.FLOWER]: 'bg-fuchsia-50 text-fuchsia-800 border-fuchsia-200',
+    [ENTITY_TYPES.ANIMAL]: 'bg-lime-50 text-lime-800 border-lime-200',
+    [ENTITY_TYPES.ROYAL]: 'bg-yellow-50 text-yellow-800 border-yellow-200',
+    [ENTITY_TYPES.BIBLICAL]: 'bg-sky-50 text-sky-800 border-sky-200',
+    [ENTITY_TYPES.QURANIC]: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+    [ENTITY_TYPES.VEDIC]: 'bg-orange-50 text-orange-800 border-orange-200',
+    [ENTITY_TYPES.ELEMENT]: 'bg-cyan-50 text-cyan-800 border-cyan-200',
+    [ENTITY_TYPES.COLOR]: 'bg-violet-50 text-violet-800 border-violet-200',
+    [ENTITY_TYPES.PROFESSION]: 'bg-slate-50 text-slate-800 border-slate-200',
   };
-  return colors[type] || 'bg-gray-100 text-gray-800 border-gray-200';
+  return colors[type] || 'bg-gray-50 text-gray-800 border-gray-200';
 }
 
 function getEntityTypeLabel(type) {
@@ -81,19 +81,15 @@ function getEntityTypeLabel(type) {
     [ENTITY_TYPES.ELEMENT]: 'Element',
     [ENTITY_TYPES.COLOR]: 'Color',
     [ENTITY_TYPES.PROFESSION]: 'Profession',
-    [ENTITY_TYPES.PERSONALITY]: 'Personality',
-    [ENTITY_TYPES.NUMEROLOGY]: 'Numerology',
   };
   return labels[type] || 'Entity';
 }
 
 export default function KnowledgeGraph({ data, religion }) {
-  // Derive entity connections from the name data
   const connectedEntities = useMemo(() => {
     const entities = [];
     const seen = new Set();
 
-    // Religion entity
     if (religion) {
       const religionKey = religion === 'islamic' ? 'islam' : religion === 'christian' ? 'christianity' : religion === 'hindu' ? 'hinduism' : null;
       if (religionKey && ENTITY_RELATIONSHIPS[religionKey] && !seen.has(religionKey)) {
@@ -102,7 +98,6 @@ export default function KnowledgeGraph({ data, religion }) {
       }
     }
 
-    // Origin entity
     if (data.origin) {
       const originKey = data.origin.toLowerCase().replace(/\s+/g, '-');
       if (ENTITY_RELATIONSHIPS[originKey] && !seen.has(originKey)) {
@@ -111,11 +106,9 @@ export default function KnowledgeGraph({ data, religion }) {
       }
     }
 
-    // Language entities
     const languageKeys = ['arabic', 'hebrew', 'sanskrit', 'greek', 'latin', 'persian', 'turkish', 'urdu', 'english'];
     languageKeys.forEach(key => {
       if (ENTITY_RELATIONSHIPS[key] && !seen.has(key)) {
-        // Check if the name data has this language
         const langField = `in_${key}`;
         if (data[langField]?.name || data[langField]?.meaning) {
           seen.add(key);
@@ -124,7 +117,6 @@ export default function KnowledgeGraph({ data, religion }) {
       }
     });
 
-    // Meaning entities
     if (data.short_meaning || data.meaning) {
       const meaningText = (data.short_meaning || data.meaning || '').toLowerCase();
       const meaningKeys = ['strength', 'love', 'peace', 'wisdom', 'beauty', 'grace', 'gift', 'light', 'hope', 'faith', 'joy', 'power', 'king', 'queen', 'warrior', 'protector', 'blessing', 'star', 'moon', 'sun', 'river', 'mountain', 'garden', 'heaven', 'praiseworthy'];
@@ -136,7 +128,6 @@ export default function KnowledgeGraph({ data, religion }) {
       });
     }
 
-    // Country entities based on origin
     const countryMap = {
       'arabic': ['saudi-arabia', 'egypt', 'uae'],
       'persian': ['iran'],
@@ -156,7 +147,6 @@ export default function KnowledgeGraph({ data, religion }) {
       });
     }
 
-    // Sacred text entities
     if (religion === 'islamic' && !seen.has('quran')) {
       seen.add('quran');
       entities.push({ key: 'quran', ...ENTITY_RELATIONSHIPS.quran });
@@ -170,7 +160,6 @@ export default function KnowledgeGraph({ data, religion }) {
       entities.push({ key: 'veda', ...ENTITY_RELATIONSHIPS.veda });
     }
 
-    // Cultural entities
     const cultureKey = religion === 'islamic' ? 'islamic-culture' : religion === 'christian' ? 'christian-culture' : religion === 'hindu' ? 'hindu-culture' : null;
     if (cultureKey && ENTITY_RELATIONSHIPS[cultureKey] && !seen.has(cultureKey)) {
       seen.add(cultureKey);
@@ -183,14 +172,14 @@ export default function KnowledgeGraph({ data, religion }) {
   if (connectedEntities.length === 0) return null;
 
   return (
-    <section className="nv-card-solid">
-      <div className="flex items-center gap-3 mb-5">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700">
+    <section>
+      <div className="mb-5 flex items-start gap-3">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-violet-100 text-violet-700 shadow-sm">
           <Network className="h-5 w-5" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold text-slate-900">Knowledge Graph</h2>
-          <p className="text-sm text-slate-500">Connected entities and semantic relationships</p>
+          <h2 className="nv-display text-xl font-semibold text-[color:var(--nv-ink)]">Knowledge Graph</h2>
+          <p className="mt-1 text-sm text-[color:var(--nv-muted)]">Connected entities and semantic relationships</p>
         </div>
       </div>
 
@@ -200,8 +189,8 @@ export default function KnowledgeGraph({ data, religion }) {
           const typeLabel = getEntityTypeLabel(entity.type);
           const IconComponent = getEntityIcon(entity.type);
 
-          const label = typeof entity.label === 'string' ? entity.label : String(entity.label || '');
-          const description = typeof entity.description === 'string' ? entity.description : String(entity.description || '');
+          const label = typeof entity.label === 'string' ? entity.label : (typeof entity.label === 'object' && entity.label !== null ? entity.label.name || entity.label.text || JSON.stringify(entity.label) : String(entity.label || ''));
+          const description = typeof entity.description === 'string' ? entity.description : (typeof entity.description === 'object' && entity.description !== null ? entity.description.text || entity.description.name || JSON.stringify(entity.description) : String(entity.description || ''));
           const href = typeof entity.url === 'string' ? entity.url : '#';
 
           if (!label) return null;
@@ -210,19 +199,21 @@ export default function KnowledgeGraph({ data, religion }) {
             <Link
               key={entity.key}
               href={href}
-              className={`rounded-xl border p-4 transition-all hover:shadow-md ${colorClass}`}
+              className={`rounded-2xl border p-4 transition-all hover:-translate-y-0.5 hover:shadow-md ${colorClass}`}
             >
               <div className="flex items-start gap-3">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/60">
                   {typeof IconComponent === 'function' ? (
                     <IconComponent className="h-4 w-4" />
+                  ) : typeof IconComponent === 'string' ? (
+                    <span className="text-sm">{IconComponent}</span>
                   ) : (
-                    <span className="text-sm">{String(IconComponent || '')}</span>
+                    <span className="text-sm">*</span>
                   )}
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium uppercase tracking-wider opacity-70">
+                    <span className="text-[11px] font-bold uppercase tracking-[0.18em] opacity-70">
                       {typeLabel}
                     </span>
                   </div>
@@ -239,10 +230,10 @@ export default function KnowledgeGraph({ data, religion }) {
         })}
       </div>
 
-      <div className="mt-4 pt-4 border-t border-slate-200">
+      <div className="mt-5 pt-4 border-t border-[color:var(--nv-border)]">
         <Link
           href="/names-by-meaning"
-          className="inline-flex items-center gap-2 text-sm font-medium text-violet-600 hover:text-violet-700"
+          className="inline-flex items-center gap-2 text-sm font-medium text-[color:var(--nv-accent-2)] transition hover:text-[color:var(--nv-accent)]"
         >
           <Network className="h-4 w-4" />
           Explore the complete name knowledge graph

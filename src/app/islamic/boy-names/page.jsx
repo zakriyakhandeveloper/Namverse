@@ -25,7 +25,7 @@ export const metadata = {
     siteName: 'NameVerse',
     images: [
       {
-        url: getSiteUrl() + '/logo.png',
+        url: getSiteUrl() + '/logo.svg',
         width: 1200,
         height: 630,
         alt: 'Islamic Boy Names with Meanings - NameVerse',
@@ -36,7 +36,7 @@ export const metadata = {
      card: 'summary_large_image',
      title: '139+ Islamic Boy Names with Meanings & Lucky Numbers | NameVerse',
      description: 'Discover 139+ beautiful Islamic boy names with verified meanings, Arabic origins & lucky numbers for your baby.',
-    images: [getSiteUrl() + '/logo.png'],
+    images: [getSiteUrl() + '/logo.svg'],
   },
   robots: { 
     index: true, 

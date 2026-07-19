@@ -15,11 +15,23 @@ const NAMES_PER_PAGE = 50;
 export const revalidate = 31536000; // 365 days
 export const dynamicParams = true;
 
-// Pre-generate common letter/religion combinations at build time
+// Pre-generate first pages of each letter/religion combo at build time; deeper
+// pages generate on-demand via ISR. Prebuilding ALL pages (27x3x20) triggered
+// slow backend fetches per page and exceeded the 60s build timeout. Capping to
+// the first 2 pages keeps build fast while hot pages stay static.
 export async function generateStaticParams() {
-  // Disabled pre-generation for letter pages to keep build-time static pages
-  // under the 100-page budget. These pages will be generated on-demand via ISR.
-  return [];
+  const VALID_RELIGIONS = ['islamic', 'christian', 'hindu'];
+  const ALPHABET = 'abcdefghijklmnopqrstuvwxyz#'.split('');
+  const MAX_PAGES = 2;
+  const params = [];
+  for (const religion of VALID_RELIGIONS) {
+    for (const letter of ALPHABET) {
+      for (let page = 1; page <= MAX_PAGES; page++) {
+        params.push({ religion, letter, page: String(page) });
+      }
+    }
+  }
+  return params;
 }
 
 function normalizeReligion(religion) {

@@ -13,8 +13,9 @@ const VALID_RELIGIONS = ['islamic', 'christian', 'hindu'];
 // Allow dynamic slugs beyond generateStaticParams()
 export const dynamicParams = true;
 
-// 30-day cache: pages are generated once and cached for 30 days.
-export const revalidate = 31536000; // 365 days
+// 30-day ISR: name pages stay cached for 30 days unless
+// on-demand revalidation via webhook forces an immediate refresh.
+export const revalidate = 2592000;
 
 // Load local name data as fallback
 function loadLocalNameData(religion, slug) {
@@ -164,16 +165,31 @@ export async function generateStaticParams() {
     }
   }
 
+  // Prebuild a bounded set of high-traffic slugs at deploy time to keep the
+  // build fast and within memory. The previous 28/religion cap was too low
+  // (drove on-demand ISR writes); prebuilding ALL 855 exhausted build memory
+  // (OOM at ~487/1133 pages). 120 per religion (360 total) covers the popular
+  // names statically; the rest generate on-demand via ISR and cache for a year.
+  const perReligionLimit = 120;
   const limited = {};
-  const perReligionLimit = 28;
   for (const entry of deduped) {
-    if (!limited[entry.religion]) limited[entry.religion] = [];
-    if (limited[entry.religion].length < perReligionLimit) {
-      limited[entry.religion].push(entry);
+    if (!limited[entry.religion]) limited[entry.religion] = 0;
+    if (limited[entry.religion] < perReligionLimit) {
+      limited[entry.religion]++;
+      // keep as-is in order
     }
   }
-
-  return Object.values(limited).flat();
+  // Re-filter preserving order and the per-religion cap
+  const counts = {};
+  const result = [];
+  for (const entry of deduped) {
+    if (!counts[entry.religion]) counts[entry.religion] = 0;
+    if (counts[entry.religion] < perReligionLimit) {
+      counts[entry.religion]++;
+      result.push(entry);
+    }
+  }
+  return result;
 }
 
 export async function generateMetadata({ params }) {
@@ -314,9 +330,6 @@ export default async function NameDetailPage({ params }) {
 
   return (
     <>
-      {/* Canonical tag */}
-      <link rel="canonical" href={pageUrl} />
-      
       {/* hreflang tags — only en and x-default until translation routes exist */}
       <link rel="alternate" hrefLang="en" href={pageUrl} />
       <link rel="alternate" hrefLang="x-default" href={pageUrl} />

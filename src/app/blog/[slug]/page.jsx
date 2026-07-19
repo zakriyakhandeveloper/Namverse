@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { validateMetaTitle, validateMetaDescription } from '@/lib/seo/meta-helpers';
 import { getSiteUrl } from '@/lib/seo/site';
-import { BookOpen, Heart, Clock, ArrowLeft, Share2, Calendar, User, Tag, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { BookOpen, Heart, Clock, ArrowLeft, Calendar, User, ChevronDown, ChevronUp, Share2, ExternalLink, Bookmark, Printer } from 'lucide-react';
 import blogPostsData from '../../../../public/data/blog-posts.json';
 import BlogImageWithFallback from '@/components/Blog/BlogImageWithFallback';
 import islamicNames from '../../../../public/islamic_names.json';
@@ -11,52 +11,32 @@ import christianNames from '../../../../public/christians_names.json';
 import SitePage from '@/components/Layout/SitePage';
 import { createSafeSlug } from '@/lib/utils/createSafeSlug';
 import NativeBanner from '@/components/Ads/NativeBanner';
+import Script from 'next/script';
 
-// ISR with 90-day cache for blog posts — keep content stable
-export const revalidate = 31536000; // 365 days
+export const revalidate = 31536000;
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = blogPostsData.find(p => p.id === slug);
-  
-  if (!post) {
-    return { title: 'Post Not Found | NameVerse' };
-  }
+  if (!post) return { title: 'Post Not Found | NameVerse' };
 
-  const canonical = `${getSiteUrl()}/blog/${post.id}`;
+  const canonical = `${getSiteUrl()}/blog/${slug}`;
   const ogImage = post.featuredImage
     ? post.featuredImage.startsWith('http')
       ? post.featuredImage
       : `${getSiteUrl()}${post.featuredImage}`
-    : `${getSiteUrl()}/api/og?title=${encodeURIComponent(post.title)}`;
-  const seoDescription = validateMetaDescription(
-    `${post.excerpt} Read this expert guide to ${post.category.toLowerCase()} baby names, meaning, and naming trends for modern families.`
-  );
-  const seoTitle = validateMetaTitle(
-    `${post.title} | NameVerse Blog — Expert Baby Naming Advice & Latest Trends`
-  );
+    : `${getSiteUrl()}/opengraph-image`;
 
   return {
-    title: seoTitle,
-    description: seoDescription,
-    keywords: post.seoKeywords || [...(post.tags || []), `${post.category} baby names`, 'baby name trends', 'baby naming guide'].join(', '),
-    alternates: {
-      canonical,
-      languages: { en: canonical, 'x-default': canonical }
-    },
+    title: validateMetaTitle(`${post.title} | NameVerse Blog`),
+    description: validateMetaDescription(`${post.excerpt}`),
+    alternates: { canonical, languages: { en: canonical, 'x-default': canonical } },
     openGraph: {
-      title: seoTitle,
-      description: seoDescription,
+      title: validateMetaTitle(`${post.title} | NameVerse Blog`),
+      description: validateMetaDescription(`${post.excerpt}`),
       type: 'article',
       url: canonical,
-      images: [
-        {
-          url: ogImage,
-          alt: `${post.title} | NameVerse`,
-          width: 1200,
-          height: 630
-        }
-      ],
+      images: [{ url: ogImage, alt: `${post.title} | NameVerse`, width: 1200, height: 630 }],
       publishedTime: post.publishDate,
       modifiedTime: post.lastUpdated,
       authors: [post.author],
@@ -64,83 +44,44 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: 'summary_large_image',
-      title: seoTitle,
-      description: seoDescription,
+      title: validateMetaTitle(`${post.title} | NameVerse Blog`),
+      description: validateMetaDescription(`${post.excerpt}`),
       images: [ogImage],
     },
     robots: { index: true, follow: true },
   };
 }
 
-// FAQ Schema Component
-function FAQSchema({ faqs }) {
-  const publishedDate = new Date().toISOString().split('T')[0];
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "datePublished": publishedDate,
-      "author": {
-        "@type": "Organization",
-        "name": "NameVerse"
-      },
-      "answerCount": 1,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer,
-        "datePublished": publishedDate,
-        "upvoteCount": 0,
-        "author": {
-          "@type": "Organization",
-          "name": "NameVerse"
-        }
-      }
-    }))
-  };
-
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
-  );
-}
-
-// Build name-to-religion lookup sets for fast detection
 const islamicNameSet = new Set(islamicNames.map(n => n.toLowerCase()));
 const hinduNameSet = new Set(hinduNames.map(n => n.toLowerCase()));
 const christianNameSet = new Set(christianNames.map(n => n.toLowerCase()));
 
-/**
- * Detect the correct religion for a given name by checking which
- * religion's name list contains it.
- */
 function detectNameReligion(name) {
   const normalized = (typeof name === 'string' ? name : (name.name || name)).toLowerCase().trim();
   if (islamicNameSet.has(normalized)) return 'islamic';
   if (hinduNameSet.has(normalized)) return 'hindu';
   if (christianNameSet.has(normalized)) return 'christian';
-  return 'islamic'; // fallback default
+  return 'islamic';
 }
 
-// Featured Name Link Component
+function getReligionFromCategory(category) {
+  const categoryLower = category.toLowerCase();
+  if (categoryLower.includes('islamic') || categoryLower.includes('muslim')) return 'islamic';
+  if (categoryLower.includes('christian') || categoryLower.includes('biblical')) return 'christian';
+  if (categoryLower.includes('hindu') || categoryLower.includes('vedic') || categoryLower.includes('sanskrit')) return 'hindu';
+  return 'islamic';
+}
+
 function FeaturedNameLink({ name, religion: blogReligion = 'islamic' }) {
-  // Handle both string names and object names with a 'name' property
   const displayName = typeof name === 'string' ? name : name.name;
-  // Generate a slug from the name for URL
   const nameSlug = createSafeSlug(displayName);
-  // Detect the correct religion for this specific name
   const detectedReligion = detectNameReligion(name);
-  // If the blog's category maps to a specific religion (e.g. "Hindu Names" -> "hindu"),
-  // use that. Otherwise (generic category like "Baby Naming Tips"), use per-name detection.
   const finalReligion = blogReligion !== 'islamic' ? blogReligion : detectedReligion;
-  
+
   return (
     <Link
       href={`/names/${finalReligion}/${nameSlug}`}
-      className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium hover:bg-blue-100 transition-colors border border-blue-200"
+      className="inline-flex items-center gap-1 px-3 py-1.5 bg-[color:var(--nv-accent-subtle)] text-[color:var(--nv-accent)] rounded-full text-sm font-medium border border-[color:var(--nv-border)] transition hover:border-[color:var(--nv-accent-2)] hover:text-[color:var(--nv-accent-2)]"
     >
       {displayName}
       <ExternalLink className="w-3 h-3" />
@@ -148,301 +89,336 @@ function FeaturedNameLink({ name, religion: blogReligion = 'islamic' }) {
   );
 }
 
-// Helper function to get religion from category
-function getReligionFromCategory(category) {
-  const categoryLower = category.toLowerCase();
-  if (categoryLower.includes('islamic') || categoryLower.includes('muslim')) return 'islamic';
-  if (categoryLower.includes('christian') || categoryLower.includes('biblical')) return 'christian';
-  if (categoryLower.includes('hindu') || categoryLower.includes('vedic') || categoryLower.includes('sanskrit')) return 'hindu';
-  return 'islamic'; // default
+function SectionHeading({ icon: Icon, eyebrow, title, description }) {
+  return (
+    <div className="mb-6 flex items-start gap-3">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 shadow-sm">
+        <Icon className="h-5 w-5" />
+      </div>
+      <div>
+        {eyebrow && <p className="text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)]">{eyebrow}</p>}
+        <h2 className="nv-display text-xl font-semibold text-[color:var(--nv-ink)]">{title}</h2>
+        {description && <p className="mt-1 text-sm text-[color:var(--nv-muted)]">{description}</p>}
+      </div>
+    </div>
+  );
 }
 
 export default async function BlogPostPage({ params }) {
   const { slug } = await params;
   const post = blogPostsData.find(p => p.id === slug);
-
-  if (!post) {
-    notFound();
-  }
+  if (!post) notFound();
 
   const religion = getReligionFromCategory(post.category);
-
-  const relatedPosts = blogPostsData
-    .filter(p => p.category === post.category && p.id !== post.id)
-    .slice(0, 3);
-
-  const ogImage = post.featuredImage
-    ? post.featuredImage.startsWith('http')
-      ? post.featuredImage
-      : `${getSiteUrl()}${post.featuredImage}`
-    : `${getSiteUrl()}/api/og?title=${encodeURIComponent(post.title)}`;
+  const relatedPosts = blogPostsData.filter(p => p.category === post.category && p.id !== post.id).slice(0, 3);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": post.title,
-    "alternativeHeadline": post.subtitle || post.title,
-    "description": post.excerpt,
-    "image": ogImage,
-    "author": {
-      "@type": "Person",
-      "name": post.author,
-      "jobTitle": post.authorCredentials || 'Baby Name Expert'
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "NameVerse",
-      "url": getSiteUrl(),
-      "logo": {
-        "@type": "ImageObject",
-        "url": `${getSiteUrl()}/logo.png`,
-        "width": 192,
-        "height": 192
-      }
-    },
-    "datePublished": post.publishDate,
-    "dateModified": post.lastUpdated || post.publishDate,
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": `${getSiteUrl()}/blog/${post.id}`
-    },
-    "keywords": post.seoKeywords || (post.tags || []).join(', '),
-    "articleSection": post.category,
-    "genre": 'Baby Naming Advice',
-    "inLanguage": 'en-US'
+    headline: post.title,
+    alternativeHeadline: post.subtitle || post.title,
+    description: post.excerpt,
+    image: post.featuredImage || `${getSiteUrl()}/opengraph-image`,
+    author: { "@type": "Person", name: post.author, jobTitle: post.authorCredentials || 'Baby Name Expert' },
+    publisher: { "@type": "Organization", name: "NameVerse", url: getSiteUrl(), logo: { "@type": "ImageObject", url: `${getSiteUrl()}/logo.svg`, width: 192, height: 192 } },
+    datePublished: post.publishDate,
+    dateModified: post.lastUpdated || post.publishDate,
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${getSiteUrl()}/blog/${post.id}` },
+    keywords: post.seoKeywords || (post.tags || []).join(', '),
+    articleSection: post.category,
+    genre: 'Baby Naming Advice',
+    inLanguage: 'en-US'
   };
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": getSiteUrl()
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "Blog",
-        "item": `${getSiteUrl()}/blog`
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": post.title,
-        "item": `${getSiteUrl()}/blog/${post.id}`
-      }
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: getSiteUrl() },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${getSiteUrl()}/blog` },
+      { "@type": "ListItem", position: 3, name: post.title, item: `${getSiteUrl()}/blog/${post.id}` }
     ]
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      {post.content.faqs && post.content.faqs.length > 0 && (
-        <FAQSchema faqs={post.content.faqs} />
-      )}
-      
-      <SitePage className="bg-transparent" containerClassName="max-w-none px-0 py-0">
-        {/* Header */}
-        <section className="py-8 px-4 border-b border-gray-200">
-          <div className="max-w-4xl mx-auto">
-            <Link 
-              href="/blog"
-              className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 text-sm"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to Blog
-            </Link>
-            
-            <div className="flex flex-wrap gap-2 mb-4">
-              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded text-sm font-medium">
-                {post.category}
-              </span>
-              {post.featured && (
-                <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded text-sm font-medium">
-                  Featured
-                </span>
-              )}
-            </div>
-            
-            {post.subtitle && (
-              <p className="text-lg text-blue-600 font-medium mb-2">
-                {post.subtitle}
-              </p>
-            )}
-            
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
-              {post.title}
-            </h1>
-            
-            <p className="text-lg text-gray-600 mb-6">
-              {post.excerpt}
-            </p>
+      <Script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <Script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
 
-            {/* Featured Image */}
-            {post.featuredImage && (
-              <div className="relative w-full h-64 md:h-96 mb-8 rounded-xl overflow-hidden bg-gray-100">
+      {post.content.faqs && post.content.faqs.length > 0 && (
+        <Script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: post.content.faqs.map(faq => ({
+                "@type": "Question",
+                name: faq.question,
+                acceptedAnswer: { "@type": "Answer", text: faq.answer }
+              }))
+            })
+          }}
+        />
+      )}
+
+      <SitePage
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Blog', href: '/blog' },
+          { label: post.title },
+        ]}
+      >
+        <div className="nv-stack">
+          {/* Article Header */}
+          <section className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)] overflow-hidden">
+            <div className="p-6 sm:p-8 lg:p-10">
+              <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-medium text-[color:var(--nv-muted)] transition hover:text-[color:var(--nv-ink)] mb-4">
+                <ArrowLeft className="h-4 w-4" />
+                Back to Blog
+              </Link>
+
+              <div className="flex flex-wrap gap-2 mb-4">
+                <span className="rounded-full bg-[color:var(--nv-ink)] px-3 py-1 text-xs font-bold text-white">
+                  {post.category}
+                </span>
+                {post.featured && (
+                  <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">
+                    Featured
+                  </span>
+                )}
+              </div>
+
+              <h1 className="nv-display text-3xl font-bold leading-[0.98] tracking-tight text-[color:var(--nv-ink)] sm:text-4xl md:text-5xl">
+                {post.title}
+              </h1>
+
+              {post.subtitle && (
+                <p className="mt-3 text-lg font-medium text-[color:var(--nv-accent-2)]">
+                  {post.subtitle}
+                </p>
+              )}
+
+              <p className="mt-3 text-base leading-relaxed text-[color:var(--nv-muted)]">
+                {post.excerpt}
+              </p>
+
+              <div className="mt-5 flex flex-wrap items-center gap-4 text-sm text-[color:var(--nv-muted)]">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[color:var(--nv-ink)] text-white text-xs font-bold">
+                    {post.author.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  </div>
+                  <div>
+                    <span className="font-semibold text-[color:var(--nv-ink)] block">{post.author}</span>
+                    {post.authorCredentials && <span className="text-xs">{post.authorCredentials}</span>}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  <span>{new Date(post.publishDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  <span>{post.readTime}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Featured Image / Visual Block */}
+            <div className="relative w-full h-64 sm:h-80 md:h-96 lg:h-[28rem] overflow-hidden bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900">
+              {post.featuredImage ? (
                 <BlogImageWithFallback
                   src={post.featuredImage.startsWith('http') ? post.featuredImage : `${getSiteUrl()}${post.featuredImage}`}
                   alt={post.title}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                </BlogImageWithFallback>
-              </div>
-            )}
-            
-            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-              <div className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                <span>{post.author}</span>
-                {post.authorCredentials && (
-                  <span className="text-gray-400">— {post.authorCredentials}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                <span>{new Date(post.publishDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4" />
-                <span>{post.readTime}</span>
-              </div>
-             </div>
-           </div>
-         </section>
- 
- 
-         {/* Content */}
-         <article className="py-12 px-4">
-          <div className="max-w-4xl mx-auto">
-            {/* Author Box */}
-            <div className="flex items-center gap-4 mb-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <BookOpen className="w-6 h-6 text-blue-600" />
-              </div>
-              <div>
-                <div className="font-semibold text-gray-900">{post.author}</div>
-                <div className="text-sm text-gray-500">{post.authorCredentials}</div>
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-white/10 backdrop-blur-sm shadow-lg mb-4">
+                      <BookOpen className="h-10 w-10 text-white/90" />
+                    </div>
+                    <p className="text-lg font-semibold text-white/80">{post.category}</p>
+                    <p className="text-sm text-white/50 mt-1">{post.title}</p>
+                  </div>
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
+                <div className="flex items-center gap-3">
+                  <button className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm border border-white/20 hover:bg-white/20 transition">
+                    <Bookmark className="h-3.5 w-3.5" /> Save
+                  </button>
+                  <button className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm border border-white/20 hover:bg-white/20 transition">
+                    <Share2 className="h-3.5 w-3.5" /> Share
+                  </button>
+                  <button className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm border border-white/20 hover:bg-white/20 transition">
+                    <Printer className="h-3.5 w-3.5" /> Print
+                  </button>
+                </div>
               </div>
             </div>
+          </section>
 
-             {/* Introduction */}
-             <div className="prose max-w-none mb-8">
-               <p className="text-gray-700 leading-relaxed text-lg">
-                 {post.content.introduction}
-               </p>
-             </div>
-             
-             <NativeBanner className="my-6" minHeight="90px" instanceId="blog-post-1" />
+          {/* Article Content */}
+          <article className="rounded-[2rem] border border-[color:var(--nv-border)] bg-white/62 backdrop-blur shadow-[0_22px_60px_-44px_var(--nv-shadow)]">
+            <div className="p-6 sm:p-8 lg:p-10">
+              {/* Author Box */}
+              <div className="flex items-center gap-4 mb-8 p-4 rounded-2xl bg-white/60 border border-[color:var(--nv-border)]">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[color:var(--nv-ink)] text-white">
+                  <BookOpen className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-[color:var(--nv-ink)]">{post.author}</div>
+                  <div className="text-xs text-[color:var(--nv-muted)]">{post.authorCredentials}</div>
+                </div>
+              </div>
 
-             {/* REVENUE BANNERS — center of blog content */}
+              {/* Introduction */}
+              <div className="prose prose-lg max-w-none mb-8">
+                <p className="text-lg leading-relaxed text-[color:var(--nv-muted)]">{post.content.introduction}</p>
+              </div>
 
+              <NativeBanner className="my-6" minHeight="90px" instanceId="blog-post-1" />
 
-             {/* Sections */}
-             {post.content.sections && post.content.sections.map((section, index) => (
-              <section key={index} className="mb-10">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  {section.title}
-                </h2>
-                <p className="text-gray-600 leading-relaxed mb-4">
-                  {section.content}
-                </p>
-                
-                {/* Featured Names - Internal Linking */}
-                {section.featuredNames && section.featuredNames.length > 0 && (
-                  <div className="mb-4">
-                    <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                      Featured Names:
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                    {section.featuredNames.map((name, i) => {
-                         const displayName = typeof name === 'string' ? name : name.name;
-                         const nameSlug = createSafeSlug(displayName);
-                         return <FeaturedNameLink key={nameSlug || i} name={name} religion={religion} />;
-                       })}
+              {/* Table of Contents */}
+              {post.content.sections && post.content.sections.length > 0 && (
+                <div className="mb-10 p-5 rounded-2xl bg-white/60 border border-[color:var(--nv-border)]">
+                  <h3 className="text-sm font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)] mb-3">Table of Contents</h3>
+                  <nav className="space-y-2">
+                    {post.content.sections.map((section, index) => (
+                      <a
+                        key={index}
+                        href={`#section-${index}`}
+                        className="flex items-center gap-2 text-sm text-[color:var(--nv-ink)] hover:text-[color:var(--nv-accent-2)] transition"
+                      >
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[color:var(--nv-ink)] text-xs font-bold text-white">
+                          {index + 1}
+                        </span>
+                        {section.title}
+                      </a>
+                    ))}
+                  </nav>
+                </div>
+              )}
+
+              {/* Content Sections */}
+              {post.content.sections && post.content.sections.map((section, index) => (
+                <section key={index} id={`section-${index}`} className="mb-10 scroll-mt-24">
+                  <h2 className="nv-display text-2xl font-semibold text-[color:var(--nv-ink)] mb-4">
+                    {section.title}
+                  </h2>
+                  <div className="text-base leading-7 text-[color:var(--nv-muted)] space-y-4">
+                    {section.content.split('\n\n').map((paragraph, pIndex) => (
+                      <p key={pIndex}>{paragraph}</p>
+                    ))}
+                  </div>
+
+                  {section.featuredNames && section.featuredNames.length > 0 && (
+                    <div className="mt-4">
+                      <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--nv-muted)] mb-3">Featured Names</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {section.featuredNames.map((name, i) => {
+                          const displayName = typeof name === 'string' ? name : name.name;
+                          const nameSlug = createSafeSlug(displayName);
+                          return <FeaturedNameLink key={nameSlug || i} name={name} religion={religion} />;
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {section.subsections && section.subsections.map((subsection, subIndex) => (
+                    <div key={subIndex} className="mt-4 ml-4 pl-4 border-l-2 border-[color:var(--nv-border)]">
+                      <h3 className="nv-display text-lg font-semibold text-[color:var(--nv-ink)] mb-2">
+                        {subsection.title}
+                      </h3>
+                      <div className="text-base leading-7 text-[color:var(--nv-muted)] space-y-3">
+                        {subsection.content.split('\n\n').map((paragraph, pIndex) => (
+                          <p key={pIndex}>{paragraph}</p>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </section>
+              ))}
+
+              <NativeBanner className="my-6" minHeight="90px" instanceId="blog-post-2" />
+
+              {/* FAQs Section */}
+              {post.content.faqs && post.content.faqs.length > 0 && (
+                <section className="mb-10">
+                  <div className="mb-5 flex items-start gap-3">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 shadow-sm">
+                      <ChevronDown className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h2 className="nv-display text-xl font-semibold text-[color:var(--nv-ink)]">Frequently Asked Questions</h2>
+                      <p className="mt-1 text-sm text-[color:var(--nv-muted)]">Common questions about {post.title.toLowerCase()}.</p>
                     </div>
                   </div>
-                )}
+                  <div className="space-y-3">
+                    {post.content.faqs.map((faq, index) => (
+                      <details
+                        key={index}
+                        className="group rounded-2xl border border-[color:var(--nv-border)] bg-white/60 transition hover:shadow-md"
+                      >
+                        <summary className="flex items-start justify-between gap-4 p-4 cursor-pointer text-left text-sm font-semibold text-[color:var(--nv-ink)]">
+                          <span>{faq.question}</span>
+                          <ChevronDown className="h-5 w-5 shrink-0 text-[color:var(--nv-muted)] transition-transform group-open:rotate-180" />
+                        </summary>
+                        <div className="px-4 pb-4 text-sm leading-6 text-[color:var(--nv-muted)]">
+                          {faq.answer}
+                        </div>
+                      </details>
+                    ))}
+                  </div>
+                </section>
+              )}
 
-                 {/* Subsections */}
-                 {section.subsections && section.subsections.map((subsection, subIndex) => (
-                   <div key={subIndex} className="ml-4 pl-4 border-l-2 border-blue-200 mb-4">
-                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                       {subsection.title}
-                     </h3>
-                     <p className="text-gray-600 leading-relaxed">
-                       {subsection.content}
-                     </p>
-                   </div>
-                 ))}
-               </section>
-             ))}
-             
-             <NativeBanner className="my-6" minHeight="90px" instanceId="blog-post-2" />
- 
-             {/* FAQs Section */}
-             {post.content.faqs && post.content.faqs.length > 0 && (
-               <section className="mb-10">
-                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                   Frequently Asked Questions
-                 </h2>
-                 <div className="space-y-4">
-                   {post.content.faqs.map((faq, index) => (
-                     <details
-                       key={index}
-                       className="group bg-gray-50 rounded-lg border border-gray-200 overflow-hidden"
-                     >
-                       <summary className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100 transition-colors">
-                         <h3 className="font-semibold text-gray-900 pr-4">
-                           {faq.question}
-                         </h3>
-                         <ChevronDown className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform flex-shrink-0" />
-                       </summary>
-                       <div className="px-4 pb-4">
-                         <p className="text-gray-600 leading-relaxed">
-                           {faq.answer}
-                         </p>
-                       </div>
-                     </details>
-                   ))}
-                 </div>
-               </section>
-             )}
- 
-             <NativeBanner className="my-6" minHeight="90px" instanceId="blog-post-3" />
- 
-     {/* CTA */}
-     <section className="py-12 px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Ready to Find the Perfect Name?
-            </h2>
-            <p className="text-gray-600 mb-6">
-              Explore our database of 60,000+ baby names with meanings, origins, and numerology.
-            </p>
-            <Link
-              href="/names/religion/islamic/1"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <Heart className="w-5 h-5" />
-              Browse All Names
-            </Link>
-          </div>
-        </section>
-          </div>
-        </article>
+              <NativeBanner className="my-6" minHeight="90px" instanceId="blog-post-3" />
+
+              {/* CTA */}
+              <section className="text-center rounded-[2rem] border border-[color:var(--nv-border)] bg-white/60 p-6 sm:p-8 lg:p-10">
+                <h2 className="nv-display text-2xl font-semibold text-[color:var(--nv-ink)] sm:text-3xl">Ready to Find the Perfect Name?</h2>
+                <p className="mt-3 max-w-xl mx-auto text-sm text-[color:var(--nv-muted)] sm:text-base">
+                  Explore our database of 60,000+ baby names with meanings, origins, and numerology.
+                </p>
+                <Link
+                  href="/names/religion/islamic/1"
+                  className="inline-flex items-center gap-2 mt-6 rounded-2xl bg-[color:var(--nv-ink)] px-6 py-3 text-sm font-bold text-white transition hover:bg-slate-800"
+                >
+                  <Heart className="h-5 w-5" />
+                  Browse All Names
+                </Link>
+              </section>
+            </div>
+          </article>
+
+          {/* Related Posts */}
+          {relatedPosts.length > 0 && (
+            <section>
+              <SectionHeading icon={BookOpen} eyebrow="Related" title="Related Articles" description="More guides in the same category." />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {relatedPosts.map((post) => (
+                  <Link key={post.id} href={`/blog/${post.id}`} className="group rounded-2xl border border-[color:var(--nv-border)] bg-white/60 p-5 transition hover:-translate-y-0.5 hover:shadow-md">
+                    <span className="inline-block rounded-full bg-white/60 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-[color:var(--nv-muted)] border border-[color:var(--nv-border)] mb-3">
+                      {post.category}
+                    </span>
+                    <h3 className="text-base font-bold text-[color:var(--nv-ink)] group-hover:text-[color:var(--nv-accent-2)] transition line-clamp-2">
+                      {post.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-[color:var(--nv-muted)] line-clamp-2">{post.excerpt}</p>
+                    <div className="mt-3 flex items-center gap-1 text-sm font-bold text-[color:var(--nv-accent-2)] opacity-0 transition group-hover:opacity-100">
+                      Read <ArrowLeft className="h-3.5 w-3.5 rotate-180" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
       </SitePage>
     </>
   );

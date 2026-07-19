@@ -246,7 +246,7 @@ export function loadBlogPosts() {
 
 function getEntry(pathname, type, lastmod = today, changefreq = 'weekly', priority = 0.7) {
   return {
-    loc: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://nameverse.vercel.app'}${pathname}`,
+    loc: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://nameverse.site'}${pathname}`,
     lastmod,
     changefreq,
     priority,
@@ -545,7 +545,7 @@ export async function writeSitemapFiles() {
     for (let i = 0; i < chunksOfItems.length; i += 1) {
       const file = chunksOfItems.length === 1 ? `sitemap-${name}.xml` : `sitemap-${name}-${i + 1}.xml`;
       writeJson(path.join(publicDir, file), sitemapXml(chunksOfItems[i]));
-      sitemapLocs.push(`${process.env.NEXT_PUBLIC_SITE_URL || 'https://nameverse.vercel.app'}/${file}`);
+      sitemapLocs.push(`${process.env.NEXT_PUBLIC_SITE_URL || 'https://nameverse.site'}/${file}`);
     }
   };
   

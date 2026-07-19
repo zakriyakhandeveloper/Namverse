@@ -21,7 +21,7 @@ import { env } from '@/config/env';
 
 const API_VERSION = env.api.version || '/api/v1';
 const API_BASE = env.api.baseUrl;
-const DEFAULT_COVER_IMAGE = '/logo.png';
+const DEFAULT_COVER_IMAGE = '/logo.svg';
 
 const FALLBACK_ARTICLES = [
   {

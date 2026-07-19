@@ -306,7 +306,7 @@ const results = await searchNames('');
 
 The backend implements rate limiting:
 - **50 requests per day** per IP address
-- **Unlimited** for nameverse.vercel.app domain
+- **Unlimited** for nameverse.site domain
 - Rate limit resets every 24 hours
 
 ## 🔐 Legacy Endpoints
@@ -372,4 +372,4 @@ When adding new API endpoints:
 
 For issues or questions:
 - Backend API: https://namverse-api.vercel.app
-- Frontend: https://nameverse.vercel.app
+- Frontend: https://nameverse.site

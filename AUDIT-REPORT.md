@@ -1,7 +1,7 @@
 # NameVerse Enterprise SEO & Technical Audit Report
 
 **Audit Date:** 2026-07-02  
-**Website:** https://nameverse.vercel.app  
+**Website:** https://nameverse.site  
 **Auditor:** Senior Staff Engineer / Technical SEO Expert / GEO Specialist  
 **Scope:** Full-project audit — source code, metadata, routes, layouts, dynamic pages, static pages, APIs, sitemap, robots, schema, images, fonts, CSS, JavaScript, Next.js configuration, Vercel configuration, caching, ISR/SSG/SSR, Edge, middleware, redirects, canonical tags, content, branding, competitive analysis, US audience growth, AI Search readiness.
 
@@ -141,7 +141,7 @@ The site is also missing several pages referenced in sitemaps and navigation (e.
 
 ### 3.8 Images & Fonts
 
-**Issue:** `logo.png` is **2.08 MB** in `public/`. No WebP/AVIF fallback exists in `public/` for static assets. Only the Next.js `<Image>` component serves AVIF/WebP for `remotePatterns` (images.unsplash.com and nameverse.vercel.app). Static `logo.png` is served uncompressed.
+**Issue:** `logo.png` is **2.08 MB** in `public/`. No WebP/AVIF fallback exists in `public/` for static assets. Only the Next.js `<Image>` component serves AVIF/WebP for `remotePatterns` (images.unsplash.com and nameverse.site). Static `logo.png` is served uncompressed.
 
 **Reason:** The `next.config.mjs` `images.formats` setting only applies to the `<Image>` component's internal optimizer, not to direct `/logo.png` requests.
 
@@ -412,7 +412,7 @@ However, FAQ answers are single sentences. Google's AI Overviews typically pull 
 
 All server-rendered pages use `alternates.canonical`. Name detail pages use a `<link rel="canonical">` in the component tree.
 
-**Issue:** The homepage template suffix causes the canonical to point to `https://nameverse.vercel.app/` but the `<title>` includes `| NameVerse`, which is fine. However, paginated pages (e.g., `/names/religion/islamic/2`) use `generateCanonicalUrl` correctly with page number, so self-referencing canonicals are correct.
+**Issue:** The homepage template suffix causes the canonical to point to `https://nameverse.site/` but the `<title>` includes `| NameVerse`, which is fine. However, paginated pages (e.g., `/names/religion/islamic/2`) use `generateCanonicalUrl` correctly with page number, so self-referencing canonicals are correct.
 
 ### 9.4 Pagination
 
@@ -759,7 +759,7 @@ This is the authoritative dataset indexed by `generateStaticParams`.
 1. **No SSA data integration:** US parents expect popularity rankings based on Social Security Administration data.
 2. **No state-by-state data:** "Popular names in California" vs. "Popular names in Texas" is a high-intent query.
 3. **No US-centric content:** No articles about US naming trends, celebrity baby names, or regional preferences.
-4. **No .com authority:** nameverse.vercel.app is a subdomain; a custom domain (nameverse.com) would build more trust.
+4. **No .com authority:** nameverse.site is a subdomain; a custom domain (nameverse.com) would build more trust.
 5. **No US-based testimonials:** Social proof from US parents is missing.
 
 ### 18.3 Recommendations for US Growth

@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Globe, Award, Languages, ShieldCheck, Star, Sparkles, ArrowUpRight } from 'lucide-react';
 import SearchBar from './SearchSection';
 import Link from 'next/link';

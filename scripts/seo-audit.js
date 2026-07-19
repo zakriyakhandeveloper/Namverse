@@ -5,7 +5,7 @@ import { buildExpectedUrls, parseSitemapUrls } from '../src/lib/seo/sitemap-data
 const rootDir = process.cwd();
 const appDir = path.join(rootDir, 'src', 'app');
 const publicDir = path.join(rootDir, 'public');
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nameverse.vercel.app';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nameverse.site';
 
 function walk(dir) {
   if (!fs.existsSync(dir)) return [];

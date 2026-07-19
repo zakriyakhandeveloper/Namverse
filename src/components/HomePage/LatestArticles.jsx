@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { Clock, User, Calendar, BookOpen } from 'lucide-react';
-import Image from 'next/image';
 
 const LatestArticles = ({ articles }) => {
   // Category color mapping
@@ -91,7 +90,7 @@ const LatestArticles = ({ articles }) => {
   const generateArticleStructuredData = (article, position) => {
     const colors = categoryColors[article.category] || defaultColors;
     const date = article.publishDate || article.lastUpdated || new Date().toISOString();
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nameverse.vercel.app';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nameverse.site';
     const articleUrl = `${siteUrl}/blog/${article.id}`;
     
     const item = {
@@ -186,35 +185,17 @@ const LatestArticles = ({ articles }) => {
                   <article
                     className={`flex flex-col h-full bg-white/80 rounded-[26px] border-2 ${colors.border} ${colors.hover} shadow-[0_22px_60px_-44px_var(--nv-shadow)] hover:shadow-[0_30px_70px_-44px_var(--nv-shadow)] transition-all duration-300 overflow-hidden backdrop-blur`}
                   >
-                    {article.featuredImage ? (
-                      <div className="relative h-48 overflow-hidden bg-gray-100">
-                        <Image
-                          src={article.featuredImage.startsWith('http') ? article.featuredImage : `${siteUrl}${article.featuredImage}`}
-                          alt={article.title}
-                          fill
-                          className="object-cover transition-transform duration-300 group-hover:scale-105"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                        <div className="absolute top-3 left-3">
-                          <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${colors.badge} shadow-sm`}>
-                            {article.category}
-                          </span>
-                        </div>
+                    <div className={`relative h-48 overflow-hidden bg-gradient-to-br ${colors.gradient} flex items-center justify-center`}>
+                      <div className="absolute inset-0 bg-black/10" />
+                      <div className="relative grid h-16 w-16 place-items-center rounded-3xl bg-white/25 backdrop-blur-sm">
+                        <BookOpen className="h-8 w-8 text-white" />
                       </div>
-                    ) : (
-                      <div className={`relative h-48 overflow-hidden bg-gradient-to-br ${colors.gradient} flex items-center justify-center`}>
-                        <div className="absolute inset-0 bg-black/10" />
-                        <div className="relative grid h-16 w-16 place-items-center rounded-3xl bg-white/25 backdrop-blur-sm">
-                          <BookOpen className="h-8 w-8 text-white" />
-                        </div>
-                        <div className="absolute top-3 left-3">
-                          <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full bg-white/25 text-white shadow-sm backdrop-blur-sm`}>
-                            {article.category}
-                          </span>
-                        </div>
+                      <div className="absolute top-3 left-3">
+                        <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full bg-white/25 text-white shadow-sm backdrop-blur-sm`}>
+                          {article.category}
+                        </span>
                       </div>
-                    )}
+                    </div>
                     
                     {/* Content */}
                     <div className="p-5 sm:p-6 flex flex-col flex-1">

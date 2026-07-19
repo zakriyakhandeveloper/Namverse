@@ -53,7 +53,7 @@ export default function LoadingAnimation({ onComplete }) {
         <div className="mb-8 animate-scaleIn">
           <div className="w-24 h-24 mx-auto mb-4 relative">
             <img
-              src="/logo.png"
+              src="/logo.svg"
               alt="NameVerse Logo"
               width="96"
               height="96"

@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { Clock, ArrowRight, BookOpen } from 'lucide-react';
-import Image from 'next/image';
 
 // Category mapping for religion-based filtering
 const RELIGION_CATEGORIES = {
@@ -12,7 +11,7 @@ const RELIGION_CATEGORIES = {
 };
 
 // Default fallback image for blog posts without images
-const FALLBACK_IMG = '/logo.png';
+const FALLBACK_IMG = '/logo.svg';
 
 export default function BlogInternalLinks({ religion = 'islamic', currentPostId }) {
   // On the client, fetch blog posts on mount

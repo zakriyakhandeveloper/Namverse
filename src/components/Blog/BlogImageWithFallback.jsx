@@ -1,43 +1,37 @@
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
-import { getSiteUrl } from '@/lib/seo/site';
+// Pure CSS visual block — no <img>, no network request, no next/image.
+// Replaces the previous image-based blog cover with a lightweight gradient
+// panel showing the article initial. Keeps zero bytes of image payload.
 
-export default function BlogImageWithFallback({ src, alt, className, fill, sizes, priority, containerClassName, imageStyle, children }) {
-  const [error, setError] = useState(false);
-  const fallbackSrc = `${getSiteUrl()}/api/og?title=${encodeURIComponent(alt || 'NameVerse Blog')}`;
+const GRADIENTS = [
+  'from-indigo-500 to-purple-600',
+  'from-fuchsia-500 to-pink-600',
+  'from-violet-500 to-indigo-600',
+  'from-blue-500 to-cyan-600',
+  'from-rose-500 to-orange-500',
+  'from-emerald-500 to-teal-600',
+];
 
-  if (error) {
-    return (
-      <div className={`relative bg-gradient-to-br from-indigo-100 via-purple-50 to-indigo-50 flex items-center justify-center ${containerClassName || ''}`}>
-        <div className="text-center p-4">
-          <div className="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-            <span className="text-white text-2xl font-bold">NV</span>
-          </div>
-          <p className="text-xs text-gray-500 font-medium truncate max-w-[200px] mx-auto">
-            {alt || 'NameVerse Blog'}
-          </p>
-        </div>
-        {children}
-      </div>
-    );
-  }
+function pickGradient(seed = '') {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+  return GRADIENTS[h % GRADIENTS.length];
+}
 
-  const imageSrc = src && src.startsWith('http') ? src : `${getSiteUrl()}${src || ''}`;
+export default function BlogImageWithFallback({ src, alt, className, containerClassName, children }) {
+  const seed = alt || src || 'NameVerse Blog';
+  const initial = (alt || 'N').trim().charAt(0).toUpperCase() || 'N';
 
   return (
-    <div className={`relative ${containerClassName || ''}`}>
-      <Image
-        src={imageSrc}
-        alt={alt}
-        fill={fill}
-        sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
-        className={className}
-        onError={() => setError(true)}
-        style={imageStyle}
-        priority={priority}
-      />
+    <div className={`relative overflow-hidden bg-gradient-to-br ${pickGradient(seed)} ${containerClassName || ''}`}>
+      {/* decorative visual, no image asset */}
+      <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_20%_30%,white,transparent_55%),radial-gradient(circle_at_80%_70%,white,transparent_55%)]" />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="grid h-16 w-16 place-items-center rounded-3xl bg-white/25 backdrop-blur-sm shadow-lg">
+          <span className="text-3xl font-black text-white">{initial}</span>
+        </div>
+      </div>
       {children}
     </div>
   );

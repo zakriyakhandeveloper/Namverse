@@ -27,7 +27,7 @@ function parseIndex(xml) {
   return urls;
 }
 
-const expected = new Set(buildExpectedUrls().map((url) => `${process.env.NEXT_PUBLIC_SITE_URL || 'https://nameverse.vercel.app'}${url}`));
+const expected = new Set(buildExpectedUrls().map((url) => `${process.env.NEXT_PUBLIC_SITE_URL || 'https://nameverse.site'}${url}`));
 const sitemapXml = readText(path.join(publicDir, 'sitemap.xml'));
 const sitemapUrls = sitemapXml.includes('<sitemapindex') ? parseIndex(sitemapXml) : parseSitemapUrls(sitemapXml);
 const actual = new Set(sitemapUrls);

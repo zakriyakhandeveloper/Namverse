@@ -1,3 +1,5 @@
+export const revalidate = 31536000; // 365 days
+
 import fs from 'node:fs';
 import path from 'node:path';
 import Link from 'next/link';

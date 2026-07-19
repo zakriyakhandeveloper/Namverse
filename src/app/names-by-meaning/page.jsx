@@ -4,6 +4,7 @@ import { Heart, Shield, Brain, Sparkles, Moon, ChevronRight, Leaf, Star } from '
 import { validateMetaTitle, validateMetaDescription } from '@/lib/seo/meta-helpers';
 import { getSiteUrl } from '@/lib/seo/site';
 import SitePage from '@/components/Layout/SitePage';
+import { gradientFor } from '@/lib/ui/colorGradient';
 import { createSafeSlug } from '@/lib/utils/createSafeSlug';
 
 // ISR: 30-day cache — static content
@@ -214,7 +215,7 @@ export default async function NamesByMeaningPage() {
                 const Icon = category.icon;
                 return (
                   <div key={index} className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <div className={`bg-gradient-to-r from-${category.color}-500 to-${category.color}-600 p-6 text-white`}>
+                    <div className={`bg-gradient-to-r ${gradientFor(category.color)} p-6 text-white`}>
                       <div className="flex items-center gap-4">
                         <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
                           <Icon className="w-7 h-7 text-white" />

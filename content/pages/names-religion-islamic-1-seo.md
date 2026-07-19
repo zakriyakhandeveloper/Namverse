@@ -1,7 +1,7 @@
 ---
 title: "Islamic Baby Names — Complete List, Meanings & Top Picks | NameVerse"
 description: "Explore 18,000+ authentic Islamic baby names with clear meanings, origins, pronunciation, and cultural notes. Page 1: curated top picks, popular boy & girl names, and fast filters to find quranic, Arabic and modern Muslim names."
-canonical: "https://nameverse.vercel.app/names/religion/islamic/1"
+canonical: "https://nameverse.site/names/religion/islamic/1"
 keywords: "islamic baby names, quranic names, muslim baby names meanings, arabic baby names, islamic boy names, islamic girl names, muslim baby name list, popular islamic names 2026, islamic name origins"
 og_image: "/api/og?section=islamic&page=1"
 lang: en
@@ -19,7 +19,7 @@ Welcome to NameVerse's definitive Islamic baby names collection (Page 1). This p
 
 - **Title:** Islamic Baby Names — Page 1 | NameVerse
 - **Meta Description:** Discover popular Islamic baby names with meanings, origins, pronunciation, and cultural notes. Page 1 of curated Islamic names on NameVerse.
-- **Canonical:** https://nameverse.vercel.app/names/religion/islamic/1
+- **Canonical:** https://nameverse.site/names/religion/islamic/1
 - **OG Image:** /api/og?section=islamic&page=1
 - **Primary Keywords:** islamic baby names, quranic names, muslim baby names, arabic baby names, islamic name meanings
 
@@ -54,12 +54,12 @@ BreadcrumbList and CollectionPage (include server-rendered JSON-LD in head):
   "@type": "CollectionPage",
   "name": "Islamic Baby Names — Page 1",
   "description": "Curated Islamic baby names with meanings, origins and pronunciation.",
-  "url": "https://nameverse.vercel.app/names/religion/islamic/1",
+  "url": "https://nameverse.site/names/religion/islamic/1",
   "mainEntity": {
     "@type": "ItemList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Muhammad", "url": "https://nameverse.vercel.app/names/islamic/muhammad" },
-      { "@type": "ListItem", "position": 2, "name": "Ahmad", "url": "https://nameverse.vercel.app/names/islamic/ahmad" }
+      { "@type": "ListItem", "position": 1, "name": "Muhammad", "url": "https://nameverse.site/names/islamic/muhammad" },
+      { "@type": "ListItem", "position": 2, "name": "Ahmad", "url": "https://nameverse.site/names/islamic/ahmad" }
       /* include the actual first 20 items from the page */
     ]
   }
@@ -73,9 +73,9 @@ And a minimal BreadcrumbList:
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nameverse.vercel.app" },
-    { "@type": "ListItem", "position": 2, "name": "Names", "item": "https://nameverse.vercel.app/names" },
-    { "@type": "ListItem", "position": 3, "name": "Islamic Names", "item": "https://nameverse.vercel.app/names/religion/islamic/1" }
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nameverse.site" },
+    { "@type": "ListItem", "position": 2, "name": "Names", "item": "https://nameverse.site/names" },
+    { "@type": "ListItem", "position": 3, "name": "Islamic Names", "item": "https://nameverse.site/names/religion/islamic/1" }
   ]
 }
 ```
@@ -87,7 +87,7 @@ Include these server-side via your `StructuredData` component or in page head to
 ## Pagination & rel-links
 
  - Page 1 canonical should point to `/names/religion/islamic/1` (or root `/names/religion/islamic` if you prefer page 1 canonicalization).
- - Add `<link rel="next" href="https://nameverse.vercel.app/names/religion/islamic/2" />` on Page 1.
+ - Add `<link rel="next" href="https://nameverse.site/names/religion/islamic/2" />` on Page 1.
  - Only include `rel="prev"` when page > 1.
  - Add visible pagination UI with accessible aria attributes (use `aria-current` for the active page). Ensure head link tags mirror the visible pagination for crawlers.
 
@@ -98,11 +98,11 @@ Include these server-side via your `StructuredData` component or in page head to
 ```html
 <title>Islamic Baby Names — Page 1 | NameVerse</title>
 <meta name="description" content="Discover popular Islamic baby names with meanings, origins, pronunciation, and cultural notes. Page 1 of curated Islamic names on NameVerse." />
-<link rel="canonical" href="https://nameverse.vercel.app/names/religion/islamic/1" />
+<link rel="canonical" href="https://nameverse.site/names/religion/islamic/1" />
 <meta property="og:title" content="Islamic Baby Names — Page 1 | NameVerse" />
 <meta property="og:description" content="Discover popular Islamic baby names with meanings, origins, pronunciation, and cultural notes." />
-<meta property="og:image" content="https://nameverse.vercel.app/api/og?section=islamic&page=1" />
-<meta property="og:url" content="https://nameverse.vercel.app/names/religion/islamic/1" />
+<meta property="og:image" content="https://nameverse.site/api/og?section=islamic&page=1" />
+<meta property="og:url" content="https://nameverse.site/names/religion/islamic/1" />
 <meta name="twitter:card" content="summary_large_image" />
 ```
 
@@ -152,7 +152,7 @@ Q: How many names are on Page 1 and in the full Islamic collection?
 A: Page 1 shows the first page of the full Islamic collection. The entire Islamic dataset contains ~18,692 names across 374 pages (50 names per page).
 
 Q: How do I link to a name detail page?
-A: Each name item links to `/names/<religion>/<slug>` — use `https://nameverse.vercel.app/names/islamic/<slug>` for canonical internal linking.
+A: Each name item links to `/names/<religion>/<slug>` — use `https://nameverse.site/names/islamic/<slug>` for canonical internal linking.
 
 Q: Can I suggest corrections or add sourcing notes?
 A: Yes — contact the editorial team via the About page or the blog comment forms; we review updates regularly.

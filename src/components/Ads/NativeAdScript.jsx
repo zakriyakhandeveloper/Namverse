@@ -20,7 +20,7 @@ const REVOLTHEM_SCRIPTS = [
     src: 'https://revolthem.com/1606e7870f004d67136f85f2b1698cd3/invoke.js',
   },
   {
-    id: 'revolthem-social-bar',
+    id: 'revolthem-mobile-invoke',
     src: 'https://revolthem.com/1b/54/37/1b543736c10a38ea4ca3f6f7bc8a7a9b.js',
   },
   {

@@ -10,7 +10,7 @@ lang: en
 Implemented a richer SEO strategy for the `/blog` page. The page now includes:
 
 - updated page metadata with Open Graph and Twitter data
-- canonical `https://nameverse.vercel.app/blog`
+- canonical `https://nameverse.site/blog`
 - `robots: index, follow`
 - visible internal links to key category pages
 - `CollectionPage`, `BreadcrumbList`, and `FAQPage` structured data via `StructuredData`
@@ -21,7 +21,7 @@ Implemented a richer SEO strategy for the `/blog` page. The page now includes:
 - **Title:** Baby Names Blog & Expert Guides | Naming Tips, Trends & Advice | NameVerse
 - **Description:** Expert guides and articles on choosing the perfect baby name. Learn about Islamic, Christian, and Hindu naming traditions, 2026 baby name trends, and expert naming tips.
 - **Keywords:** baby names blog, naming guides, baby name trends 2026, Islamic naming guide, Christian naming guide, Hindu naming guide, how to choose baby name, baby naming tips
-- **Canonical:** https://nameverse.vercel.app/blog
+- **Canonical:** https://nameverse.site/blog
 - **Open Graph image:** `/api/og?section=blog&page=1`
 - **Twitter card:** `summary_large_image`
 

@@ -14,11 +14,22 @@ const STATIC_CATEGORIES = ['modern', 'traditional', 'nature', 'religious', 'clas
 export const revalidate = 31536000; // 365 days
 export const dynamicParams = true;
 
-// Pre-generate category pages at build time
+// Pre-generate first pages of each category/religion combo at build time; deeper
+// pages generate on-demand via ISR. Capping to the first 2 pages keeps the build
+// fast (prebuilding all 6x3x20 triggered slow per-page backend fetches).
 export async function generateStaticParams() {
-  // Disabled pre-generation for category listing pages to stay within the
-  // build-time static page budget. These pages will be generated on-demand via ISR.
-  return [];
+  const VALID_RELIGIONS = ['islamic', 'christian', 'hindu'];
+  const STATIC_CATEGORIES = ['modern', 'traditional', 'nature', 'religious', 'classical', 'unique'];
+  const MAX_PAGES = 2;
+  const params = [];
+  for (const religion of VALID_RELIGIONS) {
+    for (const category of STATIC_CATEGORIES) {
+      for (let page = 1; page <= MAX_PAGES; page++) {
+        params.push({ religion, category, page: String(page) });
+      }
+    }
+  }
+  return params;
 }
 
 function normalizeReligion(religion) {
@@ -161,6 +172,7 @@ export default async function CategoryNamesPage({ params }) {
   const rawParams = await params;
   const availableCategories = STATIC_CATEGORIES;
   const { religion, category, page } = validateAndSanitizeParams(rawParams, availableCategories);
+  const religionLabel = religion.charAt(0).toUpperCase() + religion.slice(1);
   const categoryLabel = category.charAt(0).toUpperCase() + category.slice(1);
 
   let names = [];

@@ -1,7 +1,7 @@
 ---
 title: "All Baby Names — Browse Islamic, Christian, Hindu & More | NameVerse"
 description: "Explore a comprehensive collection of baby names across religions and cultures. Find meanings, origins, pronunciation, and curated lists for Islamic, Christian, and Hindu names. Start with top picks, browse by letter, gender, origin, and discover editorial guides and FAQs."
-canonical: "https://nameverse.vercel.app/names"
+canonical: "https://nameverse.site/names"
 keywords: "baby names, all names, islamic names, christian names, hindu names, baby name meanings, name origins, popular baby names 2026"
 og_image: "/api/og?section=names&page=1"
 lang: en
@@ -99,7 +99,7 @@ Q: How many names does NameVerse host?
 A: NameVerse hosts tens of thousands of names across multiple traditions. For example, our Islamic collection contains ~18,692 names with paginated listings and searchable filters.
 
 Q: How do I link to a name detail page from my website?
-A: Use the canonical internal format `https://nameverse.vercel.app/names/<religion>/<slug>` for best results. Linking to name detail pages helps users find deeper content and improves internal crawl signals.
+A: Use the canonical internal format `https://nameverse.site/names/<religion>/<slug>` for best results. Linking to name detail pages helps users find deeper content and improves internal crawl signals.
 
 Q: Can I suggest a correction or submit a source?
 A: Yes — contact the editorial team via the About page or submit a suggestion on the relevant blog post. We review submissions and update records regularly with verified sources.
@@ -145,7 +145,7 @@ Include `CollectionPage`, `BreadcrumbList`, and `FAQPage` JSON-LD server-side in
 
 - [ ] Render `CollectionPage` JSON-LD with `ItemList` for featured names and main categories.
 - [ ] Add `FAQPage` JSON-LD for the FAQ section.
-- [ ] Ensure canonical is `https://nameverse.vercel.app/names` and OG/Twitter tags are present.
+- [ ] Ensure canonical is `https://nameverse.site/names` and OG/Twitter tags are present.
 - [ ] Surface internal links near the top for crawl depth.
 - [ ] Add a prominent "Explore" block with the quick links above.
 
